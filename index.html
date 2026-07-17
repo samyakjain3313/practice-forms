@@ -50,8 +50,7 @@
   <div class="reg_container">
     <div class="container-lg p-0" id="menu">
       <ul class="progressbar mb-3">
-        <li class="first active"><a href="#"><i class="bi bi-ui-checks"></i><span>Basic Information</span></a></li>
-        <li><a href="javascript:void(0);"><i class="bi bi-ui-checks"></i><span>Verification</span></a></li>
+        <li class="first active"><a href="#"><i class="bi bi-ui-checks"></i><span>Basic Info</span></a></li>
         <li><a href="javascript:void(0);"><i class="bi bi-images"></i><span>Photo & Signature</span></a></li>
         <li><a href="javascript:void(0);"><i class="bi bi-file-earmark-text-fill"></i><span>Details</span></a></li>
         <li><a href="javascript:void(0);"><i class="bi bi-eye-fill"></i><span>Preview</span></a></li>
@@ -559,23 +558,25 @@
       var firstBad = $(errors[0]);
       if(firstBad) firstBad.scrollIntoView({behavior:'smooth', block:'center'});
     } else {
-      // Store details for verification page
-      sessionStorage.setItem('ibps_fullname', val('fmlname'));
-      sessionStorage.setItem('ibps_mobile', val('txtmobile'));
-      sessionStorage.setItem('ibps_email', composedEmail());
-      
-      // Generate random registration number and password
-      var regNo = Math.floor(1000000000 + Math.random() * 9000000000);
-      var pwdChars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-      var pwd = '';
-      for (var i = 0; i < 8; i++) {
-        pwd += pwdChars.charAt(Math.floor(Math.random() * pwdChars.length));
-      }
-      sessionStorage.setItem('ibps_reg_no', regNo);
-      sessionStorage.setItem('ibps_password', pwd);
+      if (confirm("Are you sure the data entered is correct? No change/edit will be allowed after clicking OK. Do you want to continue?")) {
+        // Store details for next steps
+        sessionStorage.setItem('ibps_fullname', val('fmlname'));
+        sessionStorage.setItem('ibps_mobile', val('txtmobile'));
+        sessionStorage.setItem('ibps_email', composedEmail());
+        
+        // Generate random registration number and password
+        var regNo = Math.floor(1000000000 + Math.random() * 9000000000);
+        var pwdChars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        var pwd = '';
+        for (var i = 0; i < 8; i++) {
+          pwd += pwdChars.charAt(Math.floor(Math.random() * pwdChars.length));
+        }
+        sessionStorage.setItem('ibps_reg_no', regNo);
+        sessionStorage.setItem('ibps_password', pwd);
 
-      // Redirect to verification page
-      window.location.href = 'verification.html';
+        // Redirect directly to photo & signature page
+        window.location.href = 'photo_signature.html';
+      }
     }
   });
 

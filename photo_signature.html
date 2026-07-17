@@ -78,8 +78,7 @@
   <div class="reg_container">
     <div class="container-lg p-0" id="menu">
       <ul class="progressbar mb-3">
-        <li class="first unactive"><a href="index.html"><i class="bi bi-ui-checks"></i><span>Basic Information</span></a></li>
-        <li class="unactive"><a href="verification.html"><i class="bi bi-ui-checks"></i><span>Verification</span></a></li>
+        <li class="first unactive"><a href="index.html"><i class="bi bi-ui-checks"></i><span>Basic Info</span></a></li>
         <li class="active"><a href="#"><i class="bi bi-images"></i><span>Photo & Signature</span></a></li>
         <li><a href="javascript:void(0);"><i class="bi bi-file-earmark-text-fill"></i><span>Details</span></a></li>
         <li><a href="javascript:void(0);"><i class="bi bi-eye-fill"></i><span>Preview</span></a></li>
@@ -96,6 +95,19 @@
     </div>
     
     <div id="result" class="alert-box error" style="display:none"></div>
+
+    <div class="alert alert-info border-info shadow-sm p-4 mb-4" id="credBanner" style="background-color: #f0fdfa; border: 1px solid #5eead4; border-left: 5px solid #0d9488; color: #115e59; border-radius: 6px;">
+      <h4 class="font-weight-bold mb-2" style="color: #0f766e;"><i class="bi bi-shield-check"></i> Registration Provisional Successful!</h4>
+      <p class="mb-1">Your Provisional Registration details are generated below. An Email & SMS containing the same has also been sent.</p>
+      <div class="row mt-3">
+        <div class="col-sm-6 mb-2 mb-sm-0">
+          <strong>Registration No:</strong> <span class="h5 font-weight-bold text-dark ml-1" id="bannerRegNo">1620984371</span>
+        </div>
+        <div class="col-sm-6">
+          <strong>Password:</strong> <span class="h5 font-weight-bold text-dark ml-1" id="bannerPwd">A7B9C3DE</span>
+        </div>
+      </div>
+    </div>
 
     <div class="row">
       <!-- Photograph Upload -->
@@ -165,6 +177,14 @@
 
 <script>
 var $ = function(id){ return document.getElementById(id); };
+
+// Load and display provisional credentials
+(function() {
+  var regNo = sessionStorage.getItem('ibps_reg_no') || '1620984371';
+  var pwd = sessionStorage.getItem('ibps_password') || 'A7B9C3DE';
+  $('bannerRegNo').textContent = regNo;
+  $('bannerPwd').textContent = pwd;
+})();
 
 // Setup file reader previews
 $('photoFile').addEventListener('change', function(e) {
