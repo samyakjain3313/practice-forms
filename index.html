@@ -441,7 +441,7 @@
       return true;
     }
     function matchPair(id, cid, label){
-      if(val(id) !== val(cid)){
+      if(val(id).toUpperCase() !== val(cid).toUpperCase()){
         showError(cid, 'Confirm ' + label + ' does not match ' + label + '.');
         errors.push(cid);
         return false;
@@ -469,14 +469,14 @@
     if(val('middlename')){
       if(!NAME_RE.test(val('middlename'))){ showError('middlename','Middle Name can contain only letters, spaces and apostrophe.'); errors.push('middlename'); }
       else { clearError('middlename'); markValid('middlename'); }
-      if(val('cmiddlename') !== val('middlename')){ showError('cmiddlename','Confirm Middle Name does not match Middle Name.'); errors.push('cmiddlename'); }
+      if(val('cmiddlename').toUpperCase() !== val('middlename').toUpperCase()){ showError('cmiddlename','Confirm Middle Name does not match Middle Name.'); errors.push('cmiddlename'); }
       else { clearError('cmiddlename'); markValid('cmiddlename'); }
     }
 
     if(val('lastname')){
       if(!NAME_RE.test(val('lastname'))){ showError('lastname','Last Name can contain only letters, spaces and apostrophe.'); errors.push('lastname'); }
       else { clearError('lastname'); markValid('lastname'); }
-      if(val('clastname') !== val('lastname')){ showError('clastname','Confirm Last Name does not match Last Name.'); errors.push('clastname'); }
+      if(val('clastname').toUpperCase() !== val('lastname').toUpperCase()){ showError('clastname','Confirm Last Name does not match Last Name.'); errors.push('clastname'); }
       else { clearError('clastname'); markValid('clastname'); }
     }
 
@@ -485,7 +485,7 @@
 
     if(radioVal('namechange') === 'Y'){
       if(!reqName('fullname_updated','Updated First Name',35)) errors.push('fullname_updated');
-      if(val('fullname_updated') !== val('cfullname_updated')){
+      if(val('fullname_updated').toUpperCase() !== val('cfullname_updated').toUpperCase()){
         showError('cfullname_updated','Confirm Updated First Name does not match.');
         errors.push('cfullname_updated');
       } else { clearError('cfullname_updated'); markValid('cfullname_updated'); }
