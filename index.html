@@ -18,14 +18,84 @@
   }
   .practice-banner small{display:block;font-weight:400;opacity:.95;font-size:12px;margin-top:3px;}
   .practice-banner .brand{color:#ffe08a;}
-  .form-control.is-invalid{border-color:#dc3545 !important;}
+  .form-control.is-invalid{border-color:#dc3545 !important;background-color:#fff5f5 !important;}
   .invalid-feedback{display:none;color:#dc3545;font-size:12.5px;margin-top:2px;}
   .invalid-feedback.show{display:block;}
-  .form-control.is-valid{border-color:#28a745 !important;}
+  .form-control.is-valid{border-color:#28a745 !important;background-color:#f0fff4 !important;}
   #result.show{display:block !important;}
   .alert-box.error{background:#fdecea;border:1px solid #f5c2c0;color:#842029;padding:10px 14px;border-radius:6px;margin-bottom:12px;}
   .alert-box.success{background:#e6f6ea;border:1px solid #b7e4c3;color:#0f5132;padding:10px 14px;border-radius:6px;margin-bottom:12px;}
   #captchaImg{font-family:monospace;font-size:22px;letter-spacing:5px;background:#eee repeating-linear-gradient(45deg,#eee,#eee 4px,#e2e2e2 4px,#e2e2e2 8px);padding:6px 18px;border:1px solid #ccc;user-select:none;text-decoration:line-through;display:inline-block;}
+
+  /* Green tick icon for validated fields */
+  .input-group.validated .form-control.is-valid {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2328a745' viewBox='0 0 16 16'%3e%3cpath d='M13.485 1.929a.75.75 0 0 1 .057 1.05l-7.93 8.75a.75.75 0 0 1-1.085.02L1.293 8.515a.75.75 0 0 1 1.06-1.06l2.78 2.78 7.38-8.15a.75.75 0 0 1 1.05-.057h-.078z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 18px;
+    padding-right: 36px;
+  }
+
+  /* Confirmation Modal Overlay */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-overlay.show {
+    display: flex;
+  }
+  .modal-dialog-custom {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.25);
+    max-width: 520px;
+    width: 90%;
+    padding: 2rem;
+    text-align: center;
+    animation: modalSlideIn 0.25s ease-out;
+  }
+  @keyframes modalSlideIn {
+    from { transform: translateY(-30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .modal-dialog-custom h4 {
+    color: #1e293b;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .modal-dialog-custom p {
+    color: #475569;
+    font-size: 14px;
+    margin-bottom: 1.5rem;
+  }
+  .modal-dialog-custom .btn-modal {
+    padding: 8px 28px;
+    border-radius: 6px;
+    font-weight: 600;
+    margin: 0 6px;
+    cursor: pointer;
+    border: none;
+    font-size: 14px;
+  }
+  .modal-dialog-custom .btn-modal-ok {
+    background: #4c56c0;
+    color: #fff;
+  }
+  .modal-dialog-custom .btn-modal-ok:hover {
+    background: #3b44a0;
+  }
+  .modal-dialog-custom .btn-modal-cancel {
+    background: #e2e8f0;
+    color: #475569;
+  }
+  .modal-dialog-custom .btn-modal-cancel:hover {
+    background: #cbd5e1;
+  }
 </style>
 </head>
 
@@ -49,13 +119,13 @@
 
   <div class="reg_container">
     <div class="container-lg p-0" id="menu">
-      <ul class="progressbar mb-3">
-        <li class="first active"><a href="#"><i class="bi bi-ui-checks"></i><span>Basic Info</span></a></li>
-        <li><a href="javascript:void(0);"><i class="bi bi-images"></i><span>Photo & Signature</span></a></li>
-        <li><a href="javascript:void(0);"><i class="bi bi-file-earmark-text-fill"></i><span>Details</span></a></li>
-        <li><a href="javascript:void(0);"><i class="bi bi-eye-fill"></i><span>Preview</span></a></li>
-        <li><a href="javascript:void(0);"><i class="bi bi-file-earmark-arrow-up-fill"></i><span>Uploads</span></a></li>
-        <li><a href="javascript:void(0);"><i class="bi bi-currency-rupee"></i><span>Payment</span></a></li>
+      <ul class="progressbar mb-4">
+        <li class="active"><a href="#"><div class="step-circle"><i class="bi bi-check"></i></div><span>Basic Info</span></a></li>
+        <li><a href="javascript:void(0);"><div class="step-circle"><i class="bi bi-check"></i></div><span>Photo & Signature</span></a></li>
+        <li><a href="javascript:void(0);"><div class="step-circle"><i class="bi bi-check"></i></div><span>Details</span></a></li>
+        <li><a href="javascript:void(0);"><div class="step-circle"><i class="bi bi-check"></i></div><span>Preview</span></a></li>
+        <li><a href="javascript:void(0);"><div class="step-circle"><i class="bi bi-check"></i></div><span>Uploads</span></a></li>
+        <li><a href="javascript:void(0);"><div class="step-circle"><i class="bi bi-check"></i></div><span>Payment</span></a></li>
       </ul>
     </div>
   </div>
@@ -302,9 +372,22 @@
     <div class="spacer"></div>
 
     <div class="row justify-content-center mb-5 mt-5">
+      <input class="btn sbtn1 mr-3" type="button" id="ValidateBtn" value="Validate your details">
       <input class="btn sbtn" type="button" id="FinalSubmit" value="Save & Next">
     </div>
   </form>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal-dialog-custom">
+    <h4><i class="bi bi-exclamation-triangle-fill" style="color:#f59e0b"></i> Confirm Submission</h4>
+    <p>Are you sure the data entered is correct? No change/edit will be allowed after clicking OK. Do you want to continue?</p>
+    <div>
+      <button class="btn-modal btn-modal-cancel" id="modalCancel">Cancel</button>
+      <button class="btn-modal btn-modal-ok" id="modalOk">OK — Proceed</button>
+    </div>
+  </div>
 </div>
 
 <footer class="footer">
@@ -318,6 +401,47 @@
   var $ = function(id){ return document.getElementById(id); };
   var NAME_RE = /^[A-Za-z' ]+$/;
   var currentCaptcha = '';
+
+  // ====== DISABLE COPY-PASTE ON ALL INPUTS ======
+  document.addEventListener('DOMContentLoaded', function(){
+    var allInputs = document.querySelectorAll('#reg_frm input, #reg_frm select, #reg_frm textarea');
+    allInputs.forEach(function(el){
+      el.addEventListener('copy', function(e){ e.preventDefault(); });
+      el.addEventListener('paste', function(e){ e.preventDefault(); });
+      el.addEventListener('cut', function(e){ e.preventDefault(); });
+    });
+  });
+
+  // ====== CLEAR STATE ON TAB/VISIBILITY CHANGE ======
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden){
+      var allInputs = document.querySelectorAll('#reg_frm input:not([type="radio"]):not([type="checkbox"]):not([type="button"]):not([type="submit"]), #reg_frm select, #reg_frm textarea');
+      allInputs.forEach(function(el){
+        if(!el.disabled && !el.readOnly){
+          if(el.tagName === 'SELECT'){
+            el.selectedIndex = 0;
+          } else {
+            el.value = '';
+          }
+          el.classList.remove('is-valid','is-invalid');
+        }
+      });
+      // Uncheck radios and checkboxes
+      document.querySelectorAll('#reg_frm input[type="radio"], #reg_frm input[type="checkbox"]').forEach(function(el){
+        el.checked = false;
+      });
+      // Reset full name
+      $('fmlname').value = '';
+      // Hide conditional sections
+      ['div_fullname_updated','div_cfullname_updated','div_namechange_confirmation'].forEach(function(id){
+        $(id).classList.add('hide');
+      });
+      $('othdomain').classList.add('hide');
+      // Clear errors
+      var result = $('result');
+      if(result){ result.style.display = 'none'; }
+    }
+  });
 
   function genCaptcha(){
     var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -336,7 +460,10 @@
   function showError(field, msg){
     var input = $(field);
     var err = $('err_' + field);
-    if(input) input.classList.add('is-invalid');
+    if(input){
+      input.classList.add('is-invalid');
+      input.classList.remove('is-valid');
+    }
     if(err){ err.textContent = msg; err.classList.add('show'); }
   }
   function clearError(field){
@@ -347,7 +474,10 @@
   }
   function markValid(field){
     var input = $(field);
-    if(input) input.classList.add('is-valid');
+    if(input){
+      input.classList.add('is-valid');
+      input.classList.remove('is-invalid');
+    }
   }
 
   function val(id){ return ($(id) && $(id).value || '').trim(); }
@@ -373,6 +503,8 @@
       $('middlename').value = val('fullname');
       $('cmiddlename').value = val('fullname');
       updateFullName();
+      // Run real-time validation on the auto-filled fields
+      liveValidateConfirmPair('middlename','cmiddlename','Middle Name');
     }
   });
 
@@ -424,6 +556,128 @@
     }
   });
 
+  // ====== REAL-TIME VALIDATION FOR CONFIRM FIELDS ======
+  function liveValidateConfirmPair(origId, confirmId, label){
+    var origVal = val(origId).toUpperCase();
+    var confVal = val(confirmId).toUpperCase();
+    if(!confVal){
+      clearError(confirmId);
+      var confInput = $(confirmId);
+      if(confInput) confInput.classList.remove('is-valid');
+      return;
+    }
+    if(origVal !== confVal){
+      showError(confirmId, 'Confirm ' + label + ' does not match ' + label + '.');
+    } else {
+      clearError(confirmId);
+      markValid(confirmId);
+    }
+  }
+
+  function liveValidateName(id, label){
+    var v = val(id);
+    if(!v){
+      clearError(id);
+      var el = $(id);
+      if(el) el.classList.remove('is-valid');
+      return;
+    }
+    if(!NAME_RE.test(v)){
+      showError(id, label + ' can contain only letters, spaces and apostrophe.');
+    } else {
+      clearError(id);
+      markValid(id);
+    }
+  }
+
+  function liveValidateMobile(id, label){
+    var v = val(id);
+    if(!v){
+      clearError(id);
+      var el = $(id);
+      if(el) el.classList.remove('is-valid');
+      return;
+    }
+    if(!/^[1-9][0-9]{9}$/.test(v)){
+      showError(id, 'Enter a valid 10-digit mobile number (no leading 0).');
+    } else {
+      clearError(id);
+      markValid(id);
+    }
+  }
+
+  // Real-time: First Name
+  $('fullname').addEventListener('input', function(){
+    liveValidateName('fullname','First Name');
+  });
+  $('fullname').addEventListener('blur', function(){
+    liveValidateName('fullname','First Name');
+    if(val('cfullname')) liveValidateConfirmPair('fullname','cfullname','First Name');
+  });
+
+  // Real-time: Confirm First Name
+  $('cfullname').addEventListener('input', function(){
+    liveValidateConfirmPair('fullname','cfullname','First Name');
+  });
+  $('cfullname').addEventListener('blur', function(){
+    liveValidateConfirmPair('fullname','cfullname','First Name');
+  });
+
+  // Real-time: Middle Name
+  $('middlename').addEventListener('input', function(){
+    liveValidateName('middlename','Middle Name');
+    if(val('cmiddlename')) liveValidateConfirmPair('middlename','cmiddlename','Middle Name');
+  });
+  $('cmiddlename').addEventListener('input', function(){
+    liveValidateConfirmPair('middlename','cmiddlename','Middle Name');
+  });
+  $('cmiddlename').addEventListener('blur', function(){
+    liveValidateConfirmPair('middlename','cmiddlename','Middle Name');
+  });
+
+  // Real-time: Last Name
+  $('lastname').addEventListener('input', function(){
+    liveValidateName('lastname','Last Name');
+    if(val('clastname')) liveValidateConfirmPair('lastname','clastname','Last Name');
+  });
+  $('clastname').addEventListener('input', function(){
+    liveValidateConfirmPair('lastname','clastname','Last Name');
+  });
+  $('clastname').addEventListener('blur', function(){
+    liveValidateConfirmPair('lastname','clastname','Last Name');
+  });
+
+  // Real-time: Mobile Number
+  $('txtmobile').addEventListener('input', function(){
+    liveValidateMobile('txtmobile','Mobile Number');
+    if(val('txtcmobile')){
+      if(val('txtmobile') !== val('txtcmobile')){
+        showError('txtcmobile','Confirm Mobile Number does not match.');
+      } else {
+        clearError('txtcmobile');
+        markValid('txtcmobile');
+      }
+    }
+  });
+
+  // Real-time: Confirm Mobile Number
+  $('txtcmobile').addEventListener('input', function(){
+    var mob = val('txtmobile');
+    var cmob = val('txtcmobile');
+    if(!cmob){
+      clearError('txtcmobile');
+      $(this.id).classList.remove('is-valid');
+      return;
+    }
+    if(mob !== cmob){
+      showError('txtcmobile','Confirm Mobile Number does not match.');
+    } else {
+      clearError('txtcmobile');
+      markValid('txtcmobile');
+    }
+  });
+
+  // Full validation
   function validateAll(){
     var errors = [];
 
@@ -548,6 +802,24 @@
     return errors;
   }
 
+  // ====== VALIDATE YOUR DETAILS BUTTON ======
+  $('ValidateBtn').addEventListener('click', function(){
+    var errors = validateAll();
+    var result = $('result');
+    if(errors.length){
+      result.className = 'alert-box error show';
+      result.style.display = 'block';
+      result.textContent = 'Validation found ' + errors.length + ' error(s). Please correct the highlighted fields.';
+      var firstBad = $(errors[0]);
+      if(firstBad) firstBad.scrollIntoView({behavior:'smooth', block:'center'});
+    } else {
+      result.className = 'alert-box success show';
+      result.style.display = 'block';
+      result.innerHTML = '<i class="bi bi-check-circle-fill"></i> All fields are valid! You can now click "Save & Next" to proceed.';
+    }
+  });
+
+  // ====== SAVE & NEXT — SHOW CENTER MODAL ======
   $('FinalSubmit').addEventListener('click', function(){
     var errors = validateAll();
     var result = $('result');
@@ -558,26 +830,42 @@
       var firstBad = $(errors[0]);
       if(firstBad) firstBad.scrollIntoView({behavior:'smooth', block:'center'});
     } else {
-      if (confirm("Are you sure the data entered is correct? No change/edit will be allowed after clicking OK. Do you want to continue?")) {
-        // Store details for next steps
-        sessionStorage.setItem('ibps_fullname', val('fmlname'));
-        sessionStorage.setItem('ibps_mobile', val('txtmobile'));
-        sessionStorage.setItem('ibps_email', composedEmail());
-        
-        // Generate random registration number and password
-        var regNo = Math.floor(1000000000 + Math.random() * 9000000000);
-        var pwdChars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-        var pwd = '';
-        for (var i = 0; i < 8; i++) {
-          pwd += pwdChars.charAt(Math.floor(Math.random() * pwdChars.length));
-        }
-        sessionStorage.setItem('ibps_reg_no', regNo);
-        sessionStorage.setItem('ibps_password', pwd);
-
-        // Redirect directly to photo & signature page
-        window.location.href = 'photo_signature.html';
-      }
+      // Show center modal instead of confirm()
+      $('confirmModal').classList.add('show');
     }
+  });
+
+  // Modal: Cancel
+  $('modalCancel').addEventListener('click', function(){
+    $('confirmModal').classList.remove('show');
+  });
+
+  // Modal: OK — Proceed
+  $('modalOk').addEventListener('click', function(){
+    $('confirmModal').classList.remove('show');
+
+    // Store details for next steps
+    sessionStorage.setItem('ibps_fullname', val('fmlname'));
+    sessionStorage.setItem('ibps_mobile', val('txtmobile'));
+    sessionStorage.setItem('ibps_email', composedEmail());
+
+    // Generate random registration number and password
+    var regNo = Math.floor(1000000000 + Math.random() * 9000000000);
+    var pwdChars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    var pwd = '';
+    for (var i = 0; i < 8; i++) {
+      pwd += pwdChars.charAt(Math.floor(Math.random() * pwdChars.length));
+    }
+    sessionStorage.setItem('ibps_reg_no', regNo);
+    sessionStorage.setItem('ibps_password', pwd);
+
+    // Redirect directly to photo & signature page
+    window.location.href = 'photo_signature.html';
+  });
+
+  // Close modal on overlay click
+  $('confirmModal').addEventListener('click', function(e){
+    if(e.target === this) this.classList.remove('show');
   });
 
   // live-clear errors as user types/fixes

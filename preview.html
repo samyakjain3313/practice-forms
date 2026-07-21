@@ -18,6 +18,8 @@
   }
   .practice-banner small{display:block;font-weight:400;opacity:.95;font-size:12px;margin-top:3px;}
   .practice-banner .brand{color:#ffe08a;}
+  .header-reg-info{font-size:12px;color:#1e293b;text-align:right;line-height:1.4;}
+  .header-reg-info strong{color:#4c56c0;}
   
   .preview-section-header {
     background-color: #334155;
@@ -72,8 +74,12 @@
 </div>
 
 <header class="loginheader regheader" id="myHeader">
-  <nav class="navbar navbar-light shadow">
+  <nav class="navbar navbar-light shadow d-flex justify-content-between align-items-center">
     <a class="navbar-brand"><img src="images/logo.jpg" width="500px" height="90px"></a>
+    <div class="header-reg-info pr-3" id="headerRegInfo" style="display:none;">
+      <div>Name: <strong id="hdrName"></strong></div>
+      <div>Reg. No: <strong id="hdrRegNo"></strong></div>
+    </div>
   </nav>
 </header>
 
@@ -84,13 +90,13 @@
 
   <div class="reg_container">
     <div class="container-lg p-0" id="menu">
-      <ul class="progressbar mb-3">
-        <li class="first unactive"><a href="index.html"><i class="bi bi-ui-checks"></i><span>Basic Info</span></a></li>
-        <li class="unactive"><a href="photo_signature.html"><i class="bi bi-images"></i><span>Photo & Signature</span></a></li>
-        <li class="unactive"><a href="details.html"><i class="bi bi-file-earmark-text-fill"></i><span>Details</span></a></li>
-        <li class="active"><a href="#"><i class="bi bi-eye-fill"></i><span>Preview</span></a></li>
-        <li><a href="javascript:void(0);"><i class="bi bi-file-earmark-arrow-up-fill"></i><span>Uploads</span></a></li>
-        <li><a href="javascript:void(0);"><i class="bi bi-currency-rupee"></i><span>Payment</span></a></li>
+      <ul class="progressbar mb-4">
+        <li class="completed"><a href="index.html"><div class="step-circle"><i class="bi bi-check"></i></div><span>Basic Info</span></a></li>
+        <li class="completed"><a href="photo_signature.html"><div class="step-circle"><i class="bi bi-check"></i></div><span>Photo & Signature</span></a></li>
+        <li class="completed"><a href="details.html"><div class="step-circle"><i class="bi bi-check"></i></div><span>Details</span></a></li>
+        <li class="active"><a href="#"><div class="step-circle"><i class="bi bi-check"></i></div><span>Preview</span></a></li>
+        <li><a href="javascript:void(0);"><div class="step-circle"><i class="bi bi-check"></i></div><span>Uploads</span></a></li>
+        <li><a href="javascript:void(0);"><div class="step-circle"><i class="bi bi-check"></i></div><span>Payment</span></a></li>
       </ul>
     </div>
   </div>
@@ -226,7 +232,8 @@
     </div>
 
     <div class="row justify-content-center mt-5 mb-3">
-      <input class="btn sbtn" type="button" id="btnNext" value="Complete Registration" style="background-color: #4c56c0; border-color: #4c56c0;">
+      <a href="details.html" class="btn sbtn1 mr-3" style="text-decoration:none;">Back</a>
+      <input class="btn sbtn" type="button" id="btnNext" value="Complete Registration">
     </div>
   </div>
 </div>
@@ -274,6 +281,14 @@ var $ = function(id){ return document.getElementById(id); };
     var li = document.createElement('li');
     li.textContent = "No preference set";
     prevBanksOl.appendChild(li);
+  }
+  // Header registration info
+  var regName = sessionStorage.getItem('ibps_fullname');
+  var regNo = sessionStorage.getItem('ibps_reg_no');
+  if(regName && regNo){
+    $('headerRegInfo').style.display = 'block';
+    $('hdrName').textContent = regName;
+    $('hdrRegNo').textContent = regNo;
   }
 })();
 

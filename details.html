@@ -19,7 +19,7 @@
   .practice-banner small{display:block;font-weight:400;opacity:.95;font-size:12px;margin-top:3px;}
   .practice-banner .brand{color:#ffe08a;}
   
-  .form-control.is-invalid{border-color:#dc3545 !important;}
+  .form-control.is-invalid{border-color:#dc3545 !important;background-color:#fff5f5 !important;}
   .invalid-feedback{display:none;color:#dc3545;font-size:12.5px;margin-top:2px;}
   .invalid-feedback.show{display:block;}
   
@@ -33,18 +33,129 @@
     margin-top: 2rem;
     margin-bottom: 1.25rem;
   }
-  
+
+  /* Sub-tab navigation for Details page */
+  .detail-tabs {
+    display: flex;
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 1.5rem;
+    gap: 0;
+  }
+  .detail-tabs .tab-btn {
+    padding: 10px 24px;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    background: #f1f5f9;
+    color: #64748b;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+  }
+  .detail-tabs .tab-btn:hover {
+    background: #e2e8f0;
+    color: #334155;
+  }
+  .detail-tabs .tab-btn.active {
+    background: #fff;
+    color: #4c56c0;
+    border-bottom-color: #4c56c0;
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Bank preference panel */
   .bank-item {
     padding: 8px 12px;
     background-color: #fff;
     border: 1px solid #cbd5e1;
     margin-bottom: 6px;
     border-radius: 4px;
-    cursor: grab;
+    cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: background 0.15s;
   }
+  .bank-item:hover { background: #f1f5f9; }
+
+  .pref-selected-panel {
+    background: #f8fafc;
+    border: 2px solid #4c56c0;
+    border-radius: 8px;
+    padding: 1rem;
+    min-height: 200px;
+  }
+  .pref-selected-panel h6 {
+    color: #4c56c0;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    font-size: 14px;
+  }
+  .pref-item {
+    padding: 6px 10px;
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    cursor: grab;
+  }
+  .pref-item:active { cursor: grabbing; }
+  .pref-item .pref-rank {
+    background: #4c56c0;
+    color: #fff;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+  .pref-item .pref-remove {
+    cursor: pointer;
+    color: #dc3545;
+    font-size: 16px;
+    font-weight: 700;
+    margin-left: 8px;
+  }
+  .pref-item .pref-remove:hover { color: #a71d2a; }
+  .pref-item.dragging {
+    opacity: 0.5;
+    background: #e2e8f0;
+  }
+
+  /* Age display */
+  .age-display {
+    background: #e0f2fe;
+    border: 1px solid #7dd3fc;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #0369a1;
+    margin-top: 6px;
+  }
+
+  /* Header registration info */
+  .header-reg-info {
+    font-size: 12px;
+    color: #1e293b;
+    text-align: right;
+    line-height: 1.4;
+  }
+  .header-reg-info strong { color: #4c56c0; }
+
+  /* Disability sub-options */
+  .disability-sub { display: none; margin-top: 0.75rem; }
+  .disability-sub.show { display: block; }
 </style>
 </head>
 
@@ -56,8 +167,12 @@
 </div>
 
 <header class="loginheader regheader" id="myHeader">
-  <nav class="navbar navbar-light shadow">
+  <nav class="navbar navbar-light shadow d-flex justify-content-between align-items-center">
     <a class="navbar-brand"><img src="images/logo.jpg" width="500px" height="90px"></a>
+    <div class="header-reg-info pr-3" id="headerRegInfo" style="display:none;">
+      <div>Name: <strong id="hdrName"></strong></div>
+      <div>Reg. No: <strong id="hdrRegNo"></strong></div>
+    </div>
   </nav>
 </header>
 
@@ -68,13 +183,13 @@
 
   <div class="reg_container">
     <div class="container-lg p-0" id="menu">
-      <ul class="progressbar mb-3">
-        <li class="first unactive"><a href="index.html"><i class="bi bi-ui-checks"></i><span>Basic Info</span></a></li>
-        <li class="unactive"><a href="photo_signature.html"><i class="bi bi-images"></i><span>Photo & Signature</span></a></li>
-        <li class="active"><a href="#"><i class="bi bi-file-earmark-text-fill"></i><span>Details</span></a></li>
-        <li><a href="javascript:void(0);"><i class="bi bi-eye-fill"></i><span>Preview</span></a></li>
-        <li><a href="javascript:void(0);"><i class="bi bi-file-earmark-arrow-up-fill"></i><span>Uploads</span></a></li>
-        <li><a href="javascript:void(0);"><i class="bi bi-currency-rupee"></i><span>Payment</span></a></li>
+      <ul class="progressbar mb-4">
+        <li class="completed"><a href="index.html"><div class="step-circle"><i class="bi bi-check"></i></div><span>Basic Info</span></a></li>
+        <li class="completed"><a href="photo_signature.html"><div class="step-circle"><i class="bi bi-check"></i></div><span>Photo & Signature</span></a></li>
+        <li class="active"><a href="#"><div class="step-circle"><i class="bi bi-check"></i></div><span>Details</span></a></li>
+        <li><a href="javascript:void(0);"><div class="step-circle"><i class="bi bi-check"></i></div><span>Preview</span></a></li>
+        <li><a href="javascript:void(0);"><div class="step-circle"><i class="bi bi-check"></i></div><span>Uploads</span></a></li>
+        <li><a href="javascript:void(0);"><div class="step-circle"><i class="bi bi-check"></i></div><span>Payment</span></a></li>
       </ul>
     </div>
   </div>
@@ -86,6 +201,16 @@
     </div>
     
     <div id="result" class="alert-box error" style="display:none"></div>
+
+    <!-- Sub-Tabs: Basic | Qualification / Experience / Languages | Preference -->
+    <ul class="sub-progressbar">
+      <li class="active sub-tab-btn" data-tab="tab-basic" style="cursor:pointer;"><div class="sub-circle"><i class="bi bi-check"></i></div> Basic</li>
+      <li class="sub-tab-btn" data-tab="tab-qual" style="cursor:pointer;"><div class="sub-circle"><i class="bi bi-check"></i></div> Qualification / Experience / Languages</li>
+      <li class="sub-tab-btn" data-tab="tab-pref" style="cursor:pointer;"><div class="sub-circle"><i class="bi bi-check"></i></div> Preference</li>
+    </ul>
+
+    <!-- ===================== TAB 1: BASIC ===================== -->
+    <div class="tab-panel active" id="tab-basic">
 
     <!-- 1. Basic Details -->
     <div class="section-header">Basic Details</div>
@@ -131,6 +256,41 @@
           </div>
         </div>
         <div class="invalid-feedback" id="err_disability"></div>
+
+        <!-- Disability sub-options (shown when Yes) -->
+        <div class="disability-sub" id="disabilitySub">
+          <label>Type of Disability <sup class="error">*</sup></label>
+          <select class="custom-select" name="disability_type" id="selDisabilityType">
+            <option value="" selected>Select Disability Type</option>
+            <option value="VI">Visually Impaired (VI)</option>
+            <option value="HI">Hearing Impaired (HI)</option>
+            <option value="OC">Orthopedically Challenged (OC)</option>
+            <option value="ID">Intellectual Disability (ID)</option>
+            <option value="MI">Mental Illness (MI)</option>
+            <option value="SLD">Specific Learning Disability (SLD)</option>
+            <option value="MD">Multiple Disabilities (MD)</option>
+          </select>
+          <div class="invalid-feedback" id="err_disability_type"></div>
+
+          <div class="form-group mt-2">
+            <label for="txtDisabilityPercent">Disability Percentage (%) <sup class="error">*</sup></label>
+            <input type="number" min="40" max="100" class="form-control" name="disability_percent" id="txtDisabilityPercent" placeholder="e.g. 45">
+            <div class="invalid-feedback" id="err_disability_percent"></div>
+          </div>
+
+          <label>Do you need Scribe/Reader? <sup class="error">*</sup></label>
+          <div>
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" value="Y" name="scribe" id="scribe_y" class="custom-control-input">
+              <label class="custom-control-label" for="scribe_y">Yes</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" value="N" name="scribe" id="scribe_n" class="custom-control-input">
+              <label class="custom-control-label" for="scribe_n">No</label>
+            </div>
+          </div>
+          <div class="invalid-feedback" id="err_scribe"></div>
+        </div>
       </div>
     </div>
 
@@ -181,17 +341,89 @@
       </div>
     </div>
 
+    <!-- Ex-Servicemen & Minority -->
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label>Are you an Ex-Serviceman? <sup class="error">*</sup></label>
+        <div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" value="Y" name="exserviceman" id="exsvc_y" class="custom-control-input">
+            <label class="custom-control-label" for="exsvc_y">Yes</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" value="N" name="exserviceman" id="exsvc_n" class="custom-control-input">
+            <label class="custom-control-label" for="exsvc_n">No</label>
+          </div>
+        </div>
+        <div class="invalid-feedback" id="err_exserviceman"></div>
+      </div>
+
+      <div class="form-group col-md-4">
+        <label>Do you belong to a Minority Community? <sup class="error">*</sup></label>
+        <div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" value="Y" name="minority" id="minor_y" class="custom-control-input">
+            <label class="custom-control-label" for="minor_y">Yes</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" value="N" name="minority" id="minor_n" class="custom-control-input">
+            <label class="custom-control-label" for="minor_n">No</label>
+          </div>
+        </div>
+        <div class="invalid-feedback" id="err_minority"></div>
+      </div>
+
+      <div class="form-group col-md-4">
+        <label>Are you a PWBD candidate? <sup class="error">*</sup></label>
+        <div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" value="Y" name="pwbd" id="pwbd_y" class="custom-control-input">
+            <label class="custom-control-label" for="pwbd_y">Yes</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" value="N" name="pwbd" id="pwbd_n" class="custom-control-input">
+            <label class="custom-control-label" for="pwbd_n">No</label>
+          </div>
+        </div>
+        <div class="invalid-feedback" id="err_pwbd"></div>
+      </div>
+    </div>
+
     <!-- 2. Personal Details -->
     <div class="section-header">Personal Details</div>
     
     <div class="form-row">
-      <div class="form-group col-md-4">
-        <label for="dob">Date of Birth <sup class="error">*</sup></label>
-        <input type="date" class="form-control" name="dob" id="dob">
+      <!-- DOB: Separate dropdowns for DD/MM/YYYY -->
+      <div class="form-group col-md-6">
+        <label>Date of Birth <sup class="error">*</sup></label>
+        <div class="d-flex" style="gap: 8px;">
+          <select class="custom-select" name="dob_dd" id="dob_dd" style="max-width:90px;">
+            <option value="">DD</option>
+          </select>
+          <select class="custom-select" name="dob_mm" id="dob_mm" style="max-width:120px;">
+            <option value="">MM</option>
+            <option value="01">January</option>
+            <option value="02">February</option>
+            <option value="03">March</option>
+            <option value="04">April</option>
+            <option value="05">May</option>
+            <option value="06">June</option>
+            <option value="07">July</option>
+            <option value="08">August</option>
+            <option value="09">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+          <select class="custom-select" name="dob_yyyy" id="dob_yyyy" style="max-width:110px;">
+            <option value="">YYYY</option>
+          </select>
+        </div>
         <div class="invalid-feedback" id="err_dob"></div>
+        <div class="age-display" id="ageDisplay" style="display:none;"></div>
       </div>
 
-      <div class="form-group col-md-4">
+      <div class="form-group col-md-3">
         <label>Gender <sup class="error">*</sup></label>
         <div>
           <div class="custom-control custom-radio custom-control-inline">
@@ -210,7 +442,7 @@
         <div class="invalid-feedback" id="err_gender"></div>
       </div>
 
-      <div class="form-group col-md-4">
+      <div class="form-group col-md-3">
         <label for="selMarital">Marital Status <sup class="error">*</sup></label>
         <select class="custom-select" name="marital" id="selMarital">
           <option value="" selected>Select Marital Status</option>
@@ -241,6 +473,11 @@
       <textarea class="form-control" name="address" id="txtAddress" rows="2" placeholder="ENTER COMPLETE CORRESPONDENCE ADDRESS"></textarea>
       <div class="invalid-feedback" id="err_address"></div>
     </div>
+
+    </div><!-- end tab-basic -->
+
+    <!-- ===================== TAB 2: QUALIFICATION / EXPERIENCE / LANGUAGES ===================== -->
+    <div class="tab-panel" id="tab-qual">
 
     <!-- 3. Educational Qualifications -->
     <div class="section-header">Educational Qualifications (Graduation)</div>
@@ -277,20 +514,155 @@
       </div>
     </div>
 
-    <!-- 4. Bank Preferences -->
-    <div class="section-header">Participating Bank Preferences</div>
-    <p class="small text-muted mb-3"><i class="bi bi-info-circle-fill"></i> Arrange the list below in your order of preference. Check the banks to include/rank them.</p>
-    
-    <div class="row">
-      <div class="col-md-8">
-        <div id="bankList">
-          <!-- Populated dynamically -->
+    <!-- 3b. Experience Section -->
+    <div class="section-header">Experience Details</div>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label>Do you have work experience? <sup class="error">*</sup></label>
+        <div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" value="Y" name="has_experience" id="exp_y" class="custom-control-input">
+            <label class="custom-control-label" for="exp_y">Yes</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" value="N" name="has_experience" id="exp_n" class="custom-control-input">
+            <label class="custom-control-label" for="exp_n">No</label>
+          </div>
+        </div>
+        <div class="invalid-feedback" id="err_has_experience"></div>
+      </div>
+    </div>
+    <div id="experienceFields" style="display:none;">
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label for="txtOrgName">Organisation / Company Name</label>
+          <input class="form-control" name="org_name" id="txtOrgName" placeholder="ENTER ORGANISATION NAME">
+        </div>
+        <div class="form-group col-md-4">
+          <label for="txtDesignation">Designation</label>
+          <input class="form-control" name="designation" id="txtDesignation" placeholder="ENTER DESIGNATION">
+        </div>
+        <div class="form-group col-md-4">
+          <label for="txtExpYears">Total Experience (in Years)</label>
+          <input type="number" min="0" max="40" class="form-control" name="exp_years" id="txtExpYears" placeholder="e.g. 3">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label for="txtExpFrom">Experience From</label>
+          <input type="date" class="form-control" name="exp_from" id="txtExpFrom">
+        </div>
+        <div class="form-group col-md-4">
+          <label for="txtExpTo">Experience To</label>
+          <input type="date" class="form-control" name="exp_to" id="txtExpTo">
+        </div>
+        <div class="form-group col-md-4">
+          <label for="selExpType">Type of Experience</label>
+          <select class="custom-select" name="exp_type" id="selExpType">
+            <option value="" selected>Select Type</option>
+            <option value="BANKING">Banking</option>
+            <option value="FINANCE">Finance</option>
+            <option value="IT">IT / Software</option>
+            <option value="GOVERNMENT">Government</option>
+            <option value="PRIVATE">Private Sector</option>
+            <option value="OTHERS">Others</option>
+          </select>
         </div>
       </div>
     </div>
 
+    <!-- 3c. Languages Known -->
+    <div class="section-header">Languages Known</div>
+    <div class="form-row">
+      <div class="form-group col-md-4">
+        <label for="selLang1">Language 1 (Proficient) <sup class="error">*</sup></label>
+        <select class="custom-select" name="lang1" id="selLang1">
+          <option value="" selected>Select Language</option>
+          <option value="HINDI">HINDI</option>
+          <option value="ENGLISH">ENGLISH</option>
+          <option value="BENGALI">BENGALI</option>
+          <option value="TAMIL">TAMIL</option>
+          <option value="TELUGU">TELUGU</option>
+          <option value="MARATHI">MARATHI</option>
+          <option value="GUJARATI">GUJARATI</option>
+          <option value="KANNADA">KANNADA</option>
+          <option value="PUNJABI">PUNJABI</option>
+          <option value="MALAYALAM">MALAYALAM</option>
+          <option value="URDU">URDU</option>
+          <option value="OTHERS">OTHERS</option>
+        </select>
+        <div class="invalid-feedback" id="err_lang1"></div>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="selLang2">Language 2 (Optional)</label>
+        <select class="custom-select" name="lang2" id="selLang2">
+          <option value="" selected>Select Language</option>
+          <option value="HINDI">HINDI</option>
+          <option value="ENGLISH">ENGLISH</option>
+          <option value="BENGALI">BENGALI</option>
+          <option value="TAMIL">TAMIL</option>
+          <option value="TELUGU">TELUGU</option>
+          <option value="MARATHI">MARATHI</option>
+          <option value="GUJARATI">GUJARATI</option>
+          <option value="KANNADA">KANNADA</option>
+          <option value="PUNJABI">PUNJABI</option>
+          <option value="MALAYALAM">MALAYALAM</option>
+          <option value="URDU">URDU</option>
+          <option value="OTHERS">OTHERS</option>
+        </select>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="selLang3">Language 3 (Optional)</label>
+        <select class="custom-select" name="lang3" id="selLang3">
+          <option value="" selected>Select Language</option>
+          <option value="HINDI">HINDI</option>
+          <option value="ENGLISH">ENGLISH</option>
+          <option value="BENGALI">BENGALI</option>
+          <option value="TAMIL">TAMIL</option>
+          <option value="TELUGU">TELUGU</option>
+          <option value="MARATHI">MARATHI</option>
+          <option value="GUJARATI">GUJARATI</option>
+          <option value="KANNADA">KANNADA</option>
+          <option value="PUNJABI">PUNJABI</option>
+          <option value="MALAYALAM">MALAYALAM</option>
+          <option value="URDU">URDU</option>
+          <option value="OTHERS">OTHERS</option>
+        </select>
+      </div>
+    </div>
+
+    </div><!-- end tab-qual -->
+
+    <!-- ===================== TAB 3: PREFERENCE ===================== -->
+    <div class="tab-panel" id="tab-pref">
+
+    <!-- 4. Bank Preferences -->
+    <div class="section-header">Participating Bank Preferences</div>
+    <p class="small text-muted mb-3"><i class="bi bi-info-circle-fill"></i> Click a bank on the left to add it to your preference list on the right. Drag items on the right to reorder your priority.</p>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <h6 class="font-weight-bold mb-2" style="font-size:13px;color:#475569;">Available Banks (click to select)</h6>
+        <div id="bankList">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="pref-selected-panel" id="prefPanel">
+          <h6><i class="bi bi-list-ol"></i> Your Preference Order</h6>
+          <div id="prefList">
+            <!-- Populated dynamically when user selects banks -->
+          </div>
+          <p class="text-muted small mt-2 mb-0" id="prefEmptyMsg">No banks selected yet. Click banks on the left to add them.</p>
+        </div>
+      </div>
+    </div>
+
+    </div><!-- end tab-pref -->
+
     <div class="row justify-content-center mt-5 mb-5">
-      <input class="btn sbtn" type="button" id="btnNext" value="Save & Next" style="background-color: #4c56c0; border-color: #4c56c0;">
+      <input class="btn sbtn1 mr-3" type="button" id="btnValidateDetails" value="Validate your details">
+      <input class="btn sbtn" type="button" id="btnNext" value="Save & Next">
     </div>
   </form>
 </div>
@@ -304,10 +676,115 @@
 <script>
 var $ = function(id){ return document.getElementById(id); };
 
+// ====== HEADER REGISTRATION INFO ======
+(function(){
+  var regName = sessionStorage.getItem('ibps_fullname');
+  var regNo = sessionStorage.getItem('ibps_reg_no');
+  if(regName && regNo){
+    $('headerRegInfo').style.display = 'block';
+    $('hdrName').textContent = regName;
+    $('hdrRegNo').textContent = regNo;
+  }
+})();
+
+// ====== DISABLE COPY-PASTE ======
+document.addEventListener('DOMContentLoaded', function(){
+  var allInputs = document.querySelectorAll('#details_frm input, #details_frm select, #details_frm textarea');
+  allInputs.forEach(function(el){
+    el.addEventListener('copy', function(e){ e.preventDefault(); });
+    el.addEventListener('paste', function(e){ e.preventDefault(); });
+    el.addEventListener('cut', function(e){ e.preventDefault(); });
+  });
+});
+
+// ====== SUB-TAB NAVIGATION ======
+document.querySelectorAll('.sub-progressbar .sub-tab-btn').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.sub-progressbar .sub-tab-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+    btn.classList.add('active');
+    $(btn.getAttribute('data-tab')).classList.add('active');
+  });
+});
+
+// ====== DOB DROPDOWNS ======
+// Populate days
+var dobDD = $('dob_dd');
+for(var d=1;d<=31;d++){
+  var opt = document.createElement('option');
+  opt.value = d < 10 ? '0'+d : ''+d;
+  opt.textContent = d < 10 ? '0'+d : ''+d;
+  dobDD.appendChild(opt);
+}
+
+// Populate years
+var dobYY = $('dob_yyyy');
+var curYear = new Date().getFullYear();
+for(var y=curYear;y>=curYear-60;y--){
+  var opt = document.createElement('option');
+  opt.value = y;
+  opt.textContent = y;
+  dobYY.appendChild(opt);
+}
+
+// Age calculation
+var ELIGIBILITY_DATE = new Date(2026, 6, 1); // July 1, 2026
+function calculateAge(){
+  var dd = $('dob_dd').value;
+  var mm = $('dob_mm').value;
+  var yyyy = $('dob_yyyy').value;
+  var ageEl = $('ageDisplay');
+  if(!dd || !mm || !yyyy){
+    ageEl.style.display = 'none';
+    return;
+  }
+  var dob = new Date(parseInt(yyyy), parseInt(mm)-1, parseInt(dd));
+  if(isNaN(dob.getTime())){
+    ageEl.style.display = 'none';
+    return;
+  }
+  var ref = ELIGIBILITY_DATE;
+  var years = ref.getFullYear() - dob.getFullYear();
+  var months = ref.getMonth() - dob.getMonth();
+  var days = ref.getDate() - dob.getDate();
+  if(days < 0){
+    months--;
+    var prevMonth = new Date(ref.getFullYear(), ref.getMonth(), 0);
+    days += prevMonth.getDate();
+  }
+  if(months < 0){
+    years--;
+    months += 12;
+  }
+  ageEl.style.display = 'block';
+  ageEl.innerHTML = '<i class="bi bi-calendar-check"></i> Age completed as on 01.07.2026 is <strong>' + years + ' Years, ' + months + ' Month(s), ' + days + ' Day(s)</strong>';
+}
+['dob_dd','dob_mm','dob_yyyy'].forEach(function(id){
+  $(id).addEventListener('change', calculateAge);
+});
+
+// ====== DISABILITY TOGGLE ======
+document.getElementsByName('disability').forEach(function(r){
+  r.addEventListener('change', function(){
+    var show = this.value === 'Y';
+    $('disabilitySub').classList.toggle('show', show);
+    if(!show){
+      $('selDisabilityType').selectedIndex = 0;
+      $('txtDisabilityPercent').value = '';
+    }
+  });
+});
+
+// ====== EXPERIENCE TOGGLE ======
+document.getElementsByName('has_experience').forEach(function(r){
+  r.addEventListener('change', function(){
+    $('experienceFields').style.display = this.value === 'Y' ? 'block' : 'none';
+  });
+});
+
 // Populate passing years
 var yearSelect = $('txtDegreeYear');
-var currentYear = new Date().getFullYear();
-for (var y = currentYear; y >= currentYear - 15; y--) {
+for (var y = curYear; y >= curYear - 15; y--) {
   var opt = document.createElement('option');
   opt.value = y;
   opt.textContent = y;
@@ -321,16 +798,97 @@ var banks = [
   "PUNJAB NATIONAL BANK", "PUNJAB & SIND BANK", "UCO BANK", "UNION BANK OF INDIA"
 ];
 
+var selectedBankOrder = [];
+
 var bankList = $('bankList');
 banks.forEach(function(bank, idx) {
   var div = document.createElement('div');
   div.className = 'bank-item shadow-sm';
-  div.innerHTML = '<span>' + (idx + 1) + '. ' + bank + '</span> <div class="custom-control custom-checkbox"><input type="checkbox" checked class="custom-control-input bank-pref" id="bank_' + idx + '" value="' + bank + '"><label class="custom-control-label" for="bank_' + idx + '">Preferred</label></div>';
+  div.setAttribute('data-bank', bank);
+  div.innerHTML = '<span>' + (idx + 1) + '. ' + bank + '</span> <button type="button" class="btn btn-sm btn-outline-primary bank-add-btn" data-bank="' + bank + '"><i class="bi bi-plus-circle"></i> Add</button>';
   bankList.appendChild(div);
 });
 
+// Bank selection logic
+bankList.addEventListener('click', function(e){
+  var btn = e.target.closest('.bank-add-btn');
+  if(!btn) return;
+  var bankName = btn.getAttribute('data-bank');
+  if(selectedBankOrder.indexOf(bankName) !== -1) return; // Already selected
+  selectedBankOrder.push(bankName);
+  btn.disabled = true;
+  btn.innerHTML = '<i class="bi bi-check-circle-fill"></i> Added';
+  btn.classList.remove('btn-outline-primary');
+  btn.classList.add('btn-success');
+  renderPrefList();
+});
+
+function renderPrefList(){
+  var prefList = $('prefList');
+  var emptyMsg = $('prefEmptyMsg');
+  prefList.innerHTML = '';
+  if(selectedBankOrder.length === 0){
+    emptyMsg.style.display = 'block';
+    return;
+  }
+  emptyMsg.style.display = 'none';
+  selectedBankOrder.forEach(function(bank, idx){
+    var div = document.createElement('div');
+    div.className = 'pref-item';
+    div.setAttribute('draggable', 'true');
+    div.setAttribute('data-idx', idx);
+    div.innerHTML = '<div class="d-flex align-items-center"><span class="pref-rank">' + (idx+1) + '</span> <span>' + bank + '</span></div> <span class="pref-remove" data-bank="' + bank + '" title="Remove">&times;</span>';
+    prefList.appendChild(div);
+  });
+
+  // Drag-and-drop reordering
+  var items = prefList.querySelectorAll('.pref-item');
+  var dragIdx = null;
+  items.forEach(function(item){
+    item.addEventListener('dragstart', function(e){
+      dragIdx = parseInt(this.getAttribute('data-idx'));
+      this.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    item.addEventListener('dragend', function(){
+      this.classList.remove('dragging');
+    });
+    item.addEventListener('dragover', function(e){
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+    });
+    item.addEventListener('drop', function(e){
+      e.preventDefault();
+      var dropIdx = parseInt(this.getAttribute('data-idx'));
+      if(dragIdx === null || dragIdx === dropIdx) return;
+      var moved = selectedBankOrder.splice(dragIdx, 1)[0];
+      selectedBankOrder.splice(dropIdx, 0, moved);
+      renderPrefList();
+    });
+  });
+
+  // Remove buttons
+  prefList.querySelectorAll('.pref-remove').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var bankName = this.getAttribute('data-bank');
+      selectedBankOrder = selectedBankOrder.filter(function(b){ return b !== bankName; });
+      // Re-enable button in left list
+      var addBtns = bankList.querySelectorAll('.bank-add-btn');
+      addBtns.forEach(function(ab){
+        if(ab.getAttribute('data-bank') === bankName){
+          ab.disabled = false;
+          ab.innerHTML = '<i class="bi bi-plus-circle"></i> Add';
+          ab.classList.remove('btn-success');
+          ab.classList.add('btn-outline-primary');
+        }
+      });
+      renderPrefList();
+    });
+  });
+}
+
 // Enforce text fields to uppercase on input
-['txtFather','txtMother','txtAddress'].forEach(function(id){
+['txtFather','txtMother','txtAddress','txtOrgName','txtDesignation'].forEach(function(id){
   var el = $(id);
   if(el) el.addEventListener('input', function(){
     this.value = this.value.toUpperCase();
@@ -339,23 +897,38 @@ banks.forEach(function(bank, idx) {
 
 // Autofill Demo Data
 $('btnDemoDetails').addEventListener('click', function() {
+  // Switch to basic tab first
+  document.querySelectorAll('.sub-progressbar .sub-tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelector('[data-tab="tab-basic"]').classList.add('active');
+  $('tab-basic').classList.add('active');
+
   $('cat_ur').checked = true;
   $('dis_n').checked = true;
   $('selReligion').value = "HINDU";
   $('selNationality').value = "INDIAN";
   $('selState').value = "UTTAR PRADESH";
-  $('dob').value = "2001-05-15";
+  $('dob_dd').value = "15";
+  $('dob_mm').value = "05";
+  $('dob_yyyy').value = "2001";
+  calculateAge();
   $('gender_m').checked = true;
   $('selMarital').value = "SINGLE";
   $('txtFather').value = "RAMESH SRIVASTAVA";
   $('txtMother').value = "SUSHMA SRIVASTAVA";
   $('txtAddress').value = "123/A, SECTOR-4, NOIDA, UTTAR PRADESH - 201301";
+  $('exsvc_n').checked = true;
+  $('minor_n').checked = true;
+  $('pwbd_n').checked = true;
   $('selDegree').value = "ENGINEERING";
   $('txtDegreeYear').value = "2023";
   $('txtPercentage').value = "78.45";
+  $('exp_n').checked = true;
+  $('selLang1').value = "HINDI";
+  $('selLang2').value = "ENGLISH";
   
   // Clear all validation errors
-  ['category','disability','religion','nationality','state','dob','gender','marital','father_name','mother_name','address','degree','passing_year','percentage'].forEach(clearError);
+  ['category','disability','religion','nationality','state','dob','gender','marital','father_name','mother_name','address','degree','passing_year','percentage','exserviceman','minority','pwbd','has_experience','lang1'].forEach(clearError);
 });
 
 function val(id){ return ($(id) && $(id).value || '').trim(); }
@@ -380,13 +953,13 @@ function clearError(field){
   if(err){ err.textContent = ''; err.classList.remove('show'); }
 }
 
-$('btnNext').addEventListener('click', function() {
+function validateAll(){
   var errors = [];
   var result = $('result');
   result.style.display = 'none';
 
   // Clear errors first
-  ['category','disability','religion','nationality','state','dob','gender','marital','father_name','mother_name','address','degree','passing_year','percentage'].forEach(clearError);
+  ['category','disability','disability_type','disability_percent','scribe','religion','nationality','state','dob','gender','marital','father_name','mother_name','address','degree','passing_year','percentage','exserviceman','minority','pwbd','has_experience','lang1'].forEach(clearError);
 
   // Validate Basic Details
   var cat = radioVal('category');
@@ -394,6 +967,12 @@ $('btnNext').addEventListener('click', function() {
   
   var dis = radioVal('disability');
   if(!dis){ showError('disability','Disability option is required.'); errors.push('disability'); }
+  if(dis === 'Y'){
+    if(!val('selDisabilityType')){ showError('disability_type','Disability type is required.'); errors.push('disability_type'); }
+    var dp = val('txtDisabilityPercent');
+    if(!dp || dp < 40 || dp > 100){ showError('disability_percent','Enter a valid disability percentage (40-100).'); errors.push('disability_percent'); }
+    if(!radioVal('scribe')){ showError('scribe','Please select scribe option.'); errors.push('scribe'); }
+  }
 
   var rel = val('selReligion');
   if(!rel){ showError('religion','Religion is required.'); errors.push('religion'); }
@@ -404,9 +983,13 @@ $('btnNext').addEventListener('click', function() {
   var st = val('selState');
   if(!st){ showError('state','State is required.'); errors.push('state'); }
 
+  if(!radioVal('exserviceman')){ showError('exserviceman','Please select an option.'); errors.push('exserviceman'); }
+  if(!radioVal('minority')){ showError('minority','Please select an option.'); errors.push('minority'); }
+  if(!radioVal('pwbd')){ showError('pwbd','Please select an option.'); errors.push('pwbd'); }
+
   // Validate Personal Details
-  var dobVal = val('dob');
-  if(!dobVal){ showError('dob','Date of Birth is required.'); errors.push('dob'); }
+  var dd = val('dob_dd'), mm = val('dob_mm'), yyyy = val('dob_yyyy');
+  if(!dd || !mm || !yyyy){ showError('dob','Date of Birth is required.'); errors.push('dob'); }
 
   var gen = radioVal('gender');
   if(!gen){ showError('gender','Gender is required.'); errors.push('gender'); }
@@ -433,6 +1016,34 @@ $('btnNext').addEventListener('click', function() {
   var pct = val('txtPercentage');
   if(!pct || isNaN(pct) || pct < 0 || pct > 100){ showError('percentage','Enter a valid graduation percentage between 0 and 100.'); errors.push('percentage'); }
 
+  if(!radioVal('has_experience')){ showError('has_experience','Please select an option.'); errors.push('has_experience'); }
+
+  if(!val('selLang1')){ showError('lang1','At least one language is required.'); errors.push('lang1'); }
+
+  return errors;
+}
+
+// Validate button
+$('btnValidateDetails').addEventListener('click', function(){
+  var errors = validateAll();
+  var result = $('result');
+  if(errors.length){
+    result.className = 'alert-box error show';
+    result.style.display = 'block';
+    result.textContent = 'Validation found ' + errors.length + ' error(s). Please correct the highlighted fields.';
+    var firstBad = $(errors[0]);
+    if(firstBad) firstBad.scrollIntoView({behavior:'smooth', block:'center'});
+  } else {
+    result.className = 'alert-box success show';
+    result.style.display = 'block';
+    result.innerHTML = '<i class="bi bi-check-circle-fill"></i> All fields are valid! You can now click "Save & Next" to proceed.';
+  }
+});
+
+$('btnNext').addEventListener('click', function() {
+  var errors = validateAll();
+  var result = $('result');
+
   if (errors.length) {
     result.className = 'alert-box error show';
     result.style.display = 'block';
@@ -442,28 +1053,36 @@ $('btnNext').addEventListener('click', function() {
     return;
   }
 
+  // Build DOB string
+  var dobStr = val('dob_yyyy') + '-' + val('dob_mm') + '-' + val('dob_dd');
+
   // Store data in sessionStorage for preview page
-  sessionStorage.setItem('ibps_category', cat);
-  sessionStorage.setItem('ibps_disability', dis);
-  sessionStorage.setItem('ibps_religion', rel);
-  sessionStorage.setItem('ibps_nationality', nat);
-  sessionStorage.setItem('ibps_state', st);
-  sessionStorage.setItem('ibps_dob', dobVal);
-  sessionStorage.setItem('ibps_gender', gen);
-  sessionStorage.setItem('ibps_marital', mar);
-  sessionStorage.setItem('ibps_father', fatherName);
-  sessionStorage.setItem('ibps_mother', motherName);
-  sessionStorage.setItem('ibps_address', addr);
-  sessionStorage.setItem('ibps_degree', deg);
-  sessionStorage.setItem('ibps_year', yr);
-  sessionStorage.setItem('ibps_percentage', pct);
+  sessionStorage.setItem('ibps_category', radioVal('category'));
+  sessionStorage.setItem('ibps_disability', radioVal('disability'));
+  if(radioVal('disability') === 'Y'){
+    sessionStorage.setItem('ibps_disability_type', val('selDisabilityType'));
+    sessionStorage.setItem('ibps_disability_percent', val('txtDisabilityPercent'));
+  }
+  sessionStorage.setItem('ibps_religion', val('selReligion'));
+  sessionStorage.setItem('ibps_nationality', val('selNationality'));
+  sessionStorage.setItem('ibps_state', val('selState'));
+  sessionStorage.setItem('ibps_exserviceman', radioVal('exserviceman'));
+  sessionStorage.setItem('ibps_minority', radioVal('minority'));
+  sessionStorage.setItem('ibps_dob', dobStr);
+  sessionStorage.setItem('ibps_gender', radioVal('gender'));
+  sessionStorage.setItem('ibps_marital', val('selMarital'));
+  sessionStorage.setItem('ibps_father', val('txtFather'));
+  sessionStorage.setItem('ibps_mother', val('txtMother'));
+  sessionStorage.setItem('ibps_address', val('txtAddress'));
+  sessionStorage.setItem('ibps_degree', val('selDegree'));
+  sessionStorage.setItem('ibps_year', val('txtDegreeYear'));
+  sessionStorage.setItem('ibps_percentage', val('txtPercentage'));
+  sessionStorage.setItem('ibps_lang1', val('selLang1'));
+  sessionStorage.setItem('ibps_lang2', val('selLang2'));
+  sessionStorage.setItem('ibps_lang3', val('selLang3'));
 
   // Bank Preferences Ordered List
-  var selectedBanks = [];
-  document.querySelectorAll('.bank-pref:checked').forEach(function(el) {
-    selectedBanks.push(el.value);
-  });
-  sessionStorage.setItem('ibps_banks', JSON.stringify(selectedBanks));
+  sessionStorage.setItem('ibps_banks', JSON.stringify(selectedBankOrder));
 
   // Redirect to Preview page
   window.location.href = 'preview.html';
