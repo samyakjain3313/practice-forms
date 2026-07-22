@@ -993,125 +993,140 @@ input:focus {
 }
 
 .progressbar {
-    display: grid;
-    grid-auto-columns: minmax(0, 1fr);
-    grid-auto-flow: column;
+    display: flex;
+    justify-content: space-between;
     overflow: hidden;
     padding: 0;
-    margin: 1rem 0;
+    margin: 1rem 0 2rem 0;
 }
 
 .progressbar li {
     list-style-type: none;
     position: relative;
     text-align: center;
-    cursor: pointer;
-    min-width: 0;
+    flex: 1;
+    font-size: 11px;
+    font-weight: 600;
+    color: #94a3b8;
 }
 
 .progressbar li a {
-    color: #6b7280;
-    font-weight: 500;
-    font-size: 14px;
-    display: block;
+    color: inherit;
     text-decoration: none;
-    transition: color 0.3s ease;
-    word-wrap: break-word;
+    display: block;
 }
 
-.progressbar li i {
-    height: 44px;
-    width: 44px;
+.progressbar li .step-circle {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
-    color: #9ca3af;
-    background: #ffffff;
+    width: 20px;
+    height: 20px;
+    margin: 0 auto 8px auto;
+    background: #fff;
+    border: 2px solid #cbd5e1;
     border-radius: 50%;
-    margin: 0 auto 10px auto;
-    font-style: normal;
-    border: 1px solid #e5e7eb;
     position: relative;
     z-index: 2;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-    box-sizing: border-box;
+    color: transparent;
+    font-size: 10px;
 }
 
-.progressbar li:hover i {
-    box-shadow: 0 0 12px rgba(156, 163, 175, 0.4);
-    transform: translateY(-2px);
-    border-color: #9ca3af;
-}
-
-/* Connecting Line */
 .progressbar li:after {
     content: '';
-    width: 100%;
-    height: 4px;
-    background: #e5e7eb;
     position: absolute;
-    right: 50%;
-    top: 22px;
-    transform: translateY(-50%);
+    width: 100%;
+    height: 2px;
+    background: #cbd5e1;
+    top: 10px;
+    left: -50%;
     z-index: 1;
-    transition: all 0.3s ease;
 }
 
 .progressbar li:first-child:after {
     content: none;
 }
 
-/* Completed Step (unactive) */
-.progressbar li.unactive i {
-    background: linear-gradient(135deg, #4f8b34 0%, #95c846 50%, #e8f96e 100%);
-    color: #ffffff;
-    border-width: 1px;
-    /* Thinner border circle */
-    border-color: #95c846;
-    /* Lighter color mapping to the gradient */
+/* Completed Step */
+.progressbar li.completed {
+    color: #10b981;
+}
+.progressbar li.completed .step-circle {
+    background: #10b981;
+    border-color: #10b981;
+    color: #fff;
+}
+.progressbar li.completed:after {
+    background: #10b981;
 }
 
-/* Added mild glow on hover specifically for the unactive/completed states */
-.progressbar li.unactive:hover i {
-    box-shadow: 0 0 12px rgba(149, 200, 70, 0.5);
-    /* Mild matching green/yellow glow */
-    border-color: #e8f96e;
-    /* Gets even lighter on hover */
-    transform: translateY(-2px);
+/* Active Step */
+.progressbar li.active {
+    color: #3b82f6;
 }
-
-.progressbar li.unactive:after {
-    background: linear-gradient(90deg, #4f8b34 0%, #95c846 100%);
+.progressbar li.active .step-circle {
+    border-color: #3b82f6;
+    background: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
 }
-
-.progressbar li.unactive a {
-    color: #4f8b34;
-}
-
-/* Current Step (active) */
-.progressbar li.active i {
-    background: linear-gradient(135deg, #4d56bf 0%, #4e47de 50%, #a5c0fc 100%);
-    color: #ffffff;
-    border-width: 1px;
-    border-color: #46b8c8;
-}
-
-/* Added active step glow on hover */
-.progressbar li.active:hover i {
-    box-shadow: 0 0 12px rgba(74, 63, 207, 0.5);
-    border-color: #c7d2ff;
-    transform: translateY(-2px);
-}
-
 .progressbar li.active:after {
-    background: linear-gradient(90deg, #e8f96e 0%, #115f72 100%);
+    background: #10b981; /* Line before active is completed */
 }
 
-.progressbar li.active a {
-    color: #4c56c0;
+/* Sub-progressbar for Details */
+.sub-progressbar {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 0;
+    margin: -10px 0 30px 0;
+    position: relative;
+}
+.sub-progressbar::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #cbd5e1;
+    z-index: 1;
+}
+.sub-progressbar li {
+    list-style: none;
+    font-size: 13px;
     font-weight: 700;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 2;
+    background: #f8f9fa;
+    padding: 0 10px;
+}
+.sub-progressbar li .sub-circle {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 10px;
+}
+.sub-progressbar li.completed {
+    color: #94a3b8;
+}
+.sub-progressbar li.completed .sub-circle {
+    background: #cbd5e1;
+}
+.sub-progressbar li.active {
+    color: #3b82f6;
+}
+.sub-progressbar li.active .sub-circle {
+    background: #3b82f6;
 }
 
 .info_box {
@@ -1187,26 +1202,26 @@ input:focus {
 
 /* Primary Theme (Blue) */
 .sbtn {
-    --btn-bg: linear-gradient(135deg, #4c56c0 0%, #5b66d4 50%, #6c78e8 100%);
-    --btn-color: #4c56c0;
-    --btn-shadow: rgba(76, 86, 192, 0.15);
-    --btn-shadow-hover: rgba(76, 86, 192, 0.25);
+    --btn-bg: #4f46e5;
+    --btn-color: #4f46e5;
+    --btn-shadow: rgba(79, 70, 229, 0.2);
+    --btn-shadow-hover: rgba(79, 70, 229, 0.3);
 }
 
-/* Secondary Theme (Slate) */
+/* Secondary Theme (Gray) */
 .sbtn1 {
-    --btn-bg: linear-gradient(135deg, #556677 0%, #667788 50%, #778899 100%);
-    --btn-color: #556677;
-    --btn-shadow: rgba(85, 102, 119, 0.15);
-    --btn-shadow-hover: rgba(85, 102, 119, 0.25);
+    --btn-bg: #94a3b8;
+    --btn-color: #94a3b8;
+    --btn-shadow: rgba(148, 163, 184, 0.2);
+    --btn-shadow-hover: rgba(148, 163, 184, 0.3);
 }
 
 /* Accent Theme (Coral/Rose) */
 .sbtn2 {
-    --btn-bg: linear-gradient(135deg, #fa607e 0%, #fb728c 50%, #fc849a 100%);
-    --btn-color: #fa607e;
-    --btn-shadow: rgba(250, 96, 126, 0.15);
-    --btn-shadow-hover: rgba(250, 96, 126, 0.25);
+    --btn-bg: #fb7185;
+    --btn-color: #fb7185;
+    --btn-shadow: rgba(251, 113, 133, 0.2);
+    --btn-shadow-hover: rgba(251, 113, 133, 0.3);
 }
 
 /* =========================================================
