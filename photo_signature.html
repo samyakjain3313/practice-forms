@@ -18,12 +18,68 @@
   }
   .practice-banner small{display:block;font-weight:400;opacity:.95;font-size:12px;margin-top:3px;}
   .practice-banner .brand{color:#ffe08a;}
-  
+
   .form-control.is-invalid{border-color:#dc3545 !important;}
   .invalid-feedback{display:none;color:#dc3545;font-size:12.5px;margin-top:2px;}
   .invalid-feedback.show{display:block;}
   .header-reg-info{font-size:12px;color:#1e293b;text-align:right;line-height:1.4;}
   .header-reg-info strong{color:#4c56c0;}
+
+  /* Green advisory boxes (as on the official page) */
+  .advisory-box{
+    background:#f0fdf4;border:1px solid #86efac;border-radius:6px;
+    padding:12px 16px;color:#166534;font-size:13px;line-height:1.55;margin-bottom:14px;
+  }
+
+  /* Upload card */
+  .upload-card{
+    border:1px solid #cbd5e1;border-radius:8px;background:#fff;
+    padding:22px;margin-bottom:24px;
+  }
+  .upload-card .col-label{font-weight:700;color:#334155;font-size:15px;margin-bottom:10px;}
+
+  .file-picker{display:flex;align-items:stretch;max-width:340px;border:1px solid #cbd5e1;border-radius:4px;overflow:hidden;}
+  .file-picker .fp-name{flex:1;padding:7px 10px;font-size:13px;color:#64748b;background:#fff;}
+  .file-picker .fp-btn{border:none;background:#e2e8f0;color:#334155;font-weight:600;font-size:13px;padding:7px 16px;cursor:pointer;border-left:1px solid #cbd5e1;}
+  .file-picker .fp-btn:hover{background:#cbd5e1;}
+
+  .guidelines-link{display:inline-block;color:#2563eb;font-size:12.5px;text-decoration:underline;cursor:pointer;margin:10px 0 4px;}
+  .and-or{font-weight:700;color:#334155;text-align:center;margin:16px 0 10px;font-size:14px;}
+
+  .capture-btn{
+    display:block;width:100%;max-width:340px;text-align:center;
+    background:#e2e8f0;color:#94a3b8;border:1px solid #cbd5e1;border-radius:4px;
+    padding:9px;font-weight:600;font-size:13.5px;cursor:pointer;margin-bottom:12px;
+  }
+  .capture-btn.enabled{background:#3b82f6;color:#fff;border-color:#3b82f6;cursor:pointer;}
+  .capture-btn.enabled:hover{background:#2563eb;}
+
+  .qr-label{font-weight:700;color:#334155;font-size:13.5px;margin-bottom:8px;}
+  .qr-box{
+    width:150px;height:150px;border:1px solid #cbd5e1;border-radius:4px;
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    color:#64748b;font-size:12.5px;cursor:pointer;position:relative;overflow:hidden;
+    background:
+      repeating-linear-gradient(45deg,#e2e8f0 0 6px,#f1f5f9 6px 12px);
+  }
+  .qr-box span{background:rgba(255,255,255,.85);padding:6px 10px;border-radius:4px;}
+
+  /* Image preview boxes */
+  .img-preview-wrap{text-align:center;margin-bottom:8px;}
+  .img-box{
+    width:150px;height:180px;border:1px solid #cbd5e1;border-radius:4px;background:#fff;
+    display:flex;align-items:center;justify-content:center;overflow:hidden;margin:0 auto 6px;
+  }
+  .img-box.sig{width:230px;height:90px;}
+  .img-box img{max-width:100%;max-height:100%;display:none;}
+  .img-box .ph{color:#94a3b8;font-size:12px;}
+  .img-caption{font-weight:700;color:#334155;font-size:13px;margin-bottom:6px;}
+
+  .confirm-row{display:flex;align-items:flex-start;gap:8px;max-width:340px;margin:0 auto 18px;}
+  .confirm-row .custom-control-label{font-size:12.5px;color:#1e293b;line-height:1.4;}
+
+  .divider-vert{border-right:1px solid #e2e8f0;}
+  @media (max-width:767px){ .divider-vert{border-right:none;border-bottom:1px solid #e2e8f0;padding-bottom:16px;margin-bottom:16px;} }
 </style>
 </head>
 
@@ -63,86 +119,127 @@
   </div>
 
   <form class="basic_details_form" id="photo_sig_frm" name="photo_sig_frm" autocomplete="off" novalidate>
-    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-4">
-      <h1 class="m-0">Photo & Signature Upload</h1>
-      <button type="button" class="btn btn-sm btn-outline-primary" id="btnDemoData"><i class="bi bi-magic"></i> Use Demo Photo & Signature</button>
+    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+      <h1 class="m-0">Photo &amp; Signature</h1>
+      <button type="button" class="btn btn-sm btn-outline-primary" id="btnDemoData"><i class="bi bi-magic"></i> Use Demo Photo &amp; Signature</button>
     </div>
-    
+
+    <!-- Advisory boxes (as on the official page) -->
+    <div class="advisory-box">
+      A recent, CLEARLY recognizable passport size photograph (4.5cm x 3.5cm) should be uploaded by the candidate in the online application form and the signature uploaded should be clear and legible. Candidates are also advised not to change their appearance till the process is completed. Any doubt about photograph or signature at any stage of the process could lead to disqualification.
+    </div>
+    <div class="advisory-box">
+      Candidates are required to capture and upload their photograph either by using webcam or mobile phone.
+    </div>
+
     <div id="result" class="alert-box error" style="display:none"></div>
 
-    <div class="row">
-      <!-- Photograph Upload -->
-      <div class="col-md-12 mb-4">
-        <div class="card shadow-sm border-0" style="border: 1px solid #cbd5e1 !important; border-radius: 8px; background-color: #f8fafc;">
-          <div class="card-header font-weight-bold border-bottom" style="background-color: #f1f5f9; color: #334155;">Scanned Photograph of the Candidate</div>
-          <div class="card-body">
-            <div class="row align-items-center">
-              <div class="col-md-6 border-right px-4">
-                <div class="d-flex align-items-center mb-3">
-                   <button type="button" class="btn btn-sm btn-outline-secondary mr-2" onclick="$('photoFile').click()">Choose File</button>
-                   <span id="photoFileName" class="text-muted small">No file chosen</span>
-                   <input type="file" id="photoFile" accept=".jpg,.jpeg" style="display:none">
-                </div>
-                <hr>
-                <p class="font-weight-bold small text-center mb-3 text-muted">OR</p>
-                <button type="button" class="btn btn-sm text-white w-100 mb-2 font-weight-bold" style="background-color: #3b82f6; border-radius: 4px;">Capture Photo using Webcamera</button>
-                <button type="button" class="btn btn-sm btn-outline-primary w-100 font-weight-bold" style="border-radius: 4px;">Scan QR to capture the Photo via Mobile</button>
-              </div>
-              <div class="col-md-6 d-flex justify-content-center">
-                <div class="text-center mx-3">
-                  <div class="d-block" style="width: 140px; height: 160px; border: 1px solid #cbd5e1; background: #fff; display:flex; align-items:center; justify-content:center; overflow:hidden;">
-                    <img id="photoImg" src="" alt="Uploaded Image" style="display:none; max-width:100%; max-height:100%;">
-                    <div id="photoPlaceholder" style="color:#94a3b8; font-size:12px;">Uploaded Image</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div class="custom-control custom-checkbox mt-4 border-top pt-3">
-              <input type="checkbox" class="custom-control-input" id="confirmPhoto" name="confirmPhoto">
-              <label class="custom-control-label" for="confirmPhoto" style="font-size: 14px; color: #1e293b; font-weight: 500;">I confirm that this is my valid photograph and it matches the specified guidelines.</label>
-            </div>
-            <div class="invalid-feedback" id="err_confirmPhoto"></div>
+    <!-- ===================== PHOTOGRAPH CARD ===================== -->
+    <div class="upload-card">
+      <div class="row">
+        <!-- LEFT: controls -->
+        <div class="col-md-6 divider-vert">
+          <div class="col-label">Scanned Photograph of the Candidate:</div>
+
+          <div class="file-picker">
+            <span class="fp-name" id="photoFileName">Choose file</span>
+            <button type="button" class="fp-btn" onclick="$('photoFile').click()">Browse</button>
+          </div>
+          <input type="file" id="photoFile" accept=".jpg,.jpeg" style="display:none">
+
+          <span class="guidelines-link" id="lnkGuidelines1">Guidelines for scanning the Photograph &amp; Signature</span>
+          <p class="small text-muted mb-0">Photo should be clearly visible in the adjacent box</p>
+
+          <div class="and-or">(AND)</div>
+
+          <div class="qr-label text-center">Capture Photo using Webcamera</div>
+          <button type="button" class="capture-btn enabled" id="btnCapturePhoto">Capture Photo</button>
+
+          <div class="and-or">(OR)</div>
+
+          <div class="qr-label text-center">Scan QR to capture the Photo via Mobile</div>
+          <div class="d-flex justify-content-center">
+            <div class="qr-box" id="qrBox"><span>Click here to scan</span></div>
           </div>
         </div>
-      </div>
 
-      <!-- Signature Upload -->
-      <div class="col-md-12 mb-4">
-        <div class="card shadow-sm border-0" style="border: 1px solid #cbd5e1 !important; border-radius: 8px; background-color: #f8fafc;">
-          <div class="card-header font-weight-bold border-bottom" style="background-color: #f1f5f9; color: #334155;">Scanned Signature of the Candidate</div>
-          <div class="card-body">
-            <div class="row align-items-center">
-              <div class="col-md-6 border-right px-4">
-                <div class="d-flex align-items-center">
-                   <button type="button" class="btn btn-sm btn-outline-secondary mr-2" onclick="$('sigFile').click()">Choose File</button>
-                   <span id="sigFileName" class="text-muted small">No file chosen</span>
-                   <input type="file" id="sigFile" accept=".jpg,.jpeg" style="display:none">
-                </div>
-              </div>
-              <div class="col-md-6 d-flex justify-content-center">
-                <div class="text-center mx-3">
-                  <div class="d-block" style="width: 250px; height: 80px; border: 1px solid #cbd5e1; background: #fff; display:flex; align-items:center; justify-content:center; overflow:hidden;">
-                    <img id="sigImg" src="" alt="Uploaded Signature" style="display:none; max-width:100%; max-height:100%;">
-                    <div id="sigPlaceholder" style="color:#94a3b8; font-size:12px;">Uploaded Signature</div>
-                  </div>
-                </div>
-              </div>
+        <!-- RIGHT: uploaded + live captured images -->
+        <div class="col-md-6">
+          <!-- Uploaded Image -->
+          <div class="img-preview-wrap">
+            <div class="img-box">
+              <img id="photoImg" src="" alt="Uploaded Image">
+              <div class="ph" id="photoPlaceholder">Uploaded Image</div>
             </div>
-            
-            <div class="custom-control custom-checkbox mt-4 border-top pt-3">
-              <input type="checkbox" class="custom-control-input" id="confirmSig" name="confirmSig">
-              <label class="custom-control-label" for="confirmSig" style="font-size: 14px; color: #1e293b; font-weight: 500;">I confirm that this is my valid signature and it matches the specified guidelines.</label>
-            </div>
-            <div class="invalid-feedback" id="err_confirmSig"></div>
+            <div class="img-caption">Uploaded Image</div>
           </div>
+          <div class="confirm-row">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="confirmRecent" name="confirmRecent">
+              <label class="custom-control-label" for="confirmRecent">I confirm that this is my recent (not more than 6 months old) photograph.</label>
+            </div>
+          </div>
+          <div class="invalid-feedback" id="err_confirmRecent"></div>
+
+          <!-- Live Captured Image -->
+          <div class="img-preview-wrap mt-2">
+            <div class="img-box">
+              <img id="liveImg" src="" alt="Live Captured Image">
+              <div class="ph" id="livePlaceholder">Live Captured Image</div>
+            </div>
+            <div class="img-caption">Live Captured Image</div>
+          </div>
+          <div class="confirm-row">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="confirmCaptured" name="confirmCaptured">
+              <label class="custom-control-label" for="confirmCaptured">I confirm that this is my photograph and has been captured while filling the application.</label>
+            </div>
+          </div>
+          <div class="invalid-feedback" id="err_confirmCaptured"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== SIGNATURE CARD ===================== -->
+    <div class="upload-card">
+      <div class="row">
+        <div class="col-md-6 divider-vert">
+          <div class="col-label">Scanned Signature of the Candidate:</div>
+          <div class="file-picker">
+            <span class="fp-name" id="sigFileName">Choose file</span>
+            <button type="button" class="fp-btn" onclick="$('sigFile').click()">Browse</button>
+          </div>
+          <input type="file" id="sigFile" accept=".jpg,.jpeg" style="display:none">
+
+          <div class="mt-2">
+            <span class="capture-btn" style="max-width:150px;display:inline-block;cursor:pointer;" id="btnSigScan">Click here to scan</span>
+          </div>
+
+          <span class="guidelines-link" id="lnkGuidelines2">Guidelines for scanning the Photograph &amp; Signature</span>
+          <p class="small text-muted mb-0">Signature should not be in CAPITAL / BLOCK letters</p>
+        </div>
+
+        <div class="col-md-6">
+          <div class="img-preview-wrap">
+            <div class="img-box sig">
+              <img id="sigImg" src="" alt="Uploaded Signature">
+              <div class="ph" id="sigPlaceholder">Uploaded Signature</div>
+            </div>
+          </div>
+          <div class="confirm-row" style="max-width:100%;">
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="confirmSig" name="confirmSig">
+              <label class="custom-control-label" for="confirmSig">I confirm that this is my valid signature and also agree to above mentioned Note.</label>
+            </div>
+          </div>
+          <div class="invalid-feedback" id="err_confirmSig"></div>
         </div>
       </div>
     </div>
 
     <div class="row justify-content-center mt-4 mb-5">
       <a href="index.html" class="btn sbtn1 mr-3" style="text-decoration:none;">Back</a>
-      <input class="btn sbtn" type="button" id="btnNext" value="Save & Next">
+      <input class="btn sbtn" type="button" id="btnNext" value="Next">
     </div>
   </form>
 </div>
@@ -156,19 +253,15 @@
 <script>
 var $ = function(id){ return document.getElementById(id); };
 
-// Load and display provisional credentials
+// Header registration info + disable copy/paste
 (function() {
-  var regNo = sessionStorage.getItem('ibps_reg_no') || '1620984371';
-  
-  // Header registration info
+  var regNo = sessionStorage.getItem('ibps_reg_no');
   var regName = sessionStorage.getItem('ibps_fullname');
   if(regName && regNo){
     $('headerRegInfo').style.display = 'block';
     $('hdrName').textContent = regName;
     $('hdrRegNo').textContent = regNo;
   }
-  
-  // Disable copy-paste on all inputs
   document.querySelectorAll('#photo_sig_frm input').forEach(function(el){
     el.addEventListener('copy', function(e){ e.preventDefault(); });
     el.addEventListener('paste', function(e){ e.preventDefault(); });
@@ -176,65 +269,80 @@ var $ = function(id){ return document.getElementById(id); };
   });
 })();
 
-// Setup file reader previews
+// Guidelines links
+['lnkGuidelines1','lnkGuidelines2'].forEach(function(id){
+  $(id).addEventListener('click', function(){
+    alert('Guidelines for scanning the Photograph & Signature:\n\n' +
+      '• Photograph: recent, passport size (4.5cm x 3.5cm), clear background, face clearly visible.\n' +
+      '• File format JPG/JPEG, dimensions ~200x230 px, size 20 KB - 50 KB.\n' +
+      '• Signature: on white paper with black ink, size ~140x60 px, 10 KB - 20 KB.\n' +
+      '• Signature must NOT be in CAPITAL / BLOCK letters.');
+  });
+});
+
+// File readers
 $('photoFile').addEventListener('change', function(e) {
   var file = e.target.files[0];
-  if(file) $('photoFileName').textContent = file.name;
-  handleFileSelect(file, 'photoImg', 'photoPlaceholder');
+  $('photoFileName').textContent = file ? file.name : 'Choose file';
+  handleFileSelect(file, 'photoImg', 'photoPlaceholder', 'ibps_photoImg');
 });
-
 $('sigFile').addEventListener('change', function(e) {
   var file = e.target.files[0];
-  if(file) $('sigFileName').textContent = file.name;
-  handleFileSelect(file, 'sigImg', 'sigPlaceholder');
+  $('sigFileName').textContent = file ? file.name : 'Choose file';
+  handleFileSelect(file, 'sigImg', 'sigPlaceholder', 'ibps_sigImg');
 });
 
-function handleFileSelect(file, imgId, placeholderId) {
+function handleFileSelect(file, imgId, placeholderId, storeKey) {
   if (!file) return;
-  
   if (!file.type.match('image/jpeg') && !file.type.match('image/jpg')) {
     alert('Please upload only JPG or JPEG files.');
     return;
   }
-  
   var reader = new FileReader();
   reader.onload = function(evt) {
     var img = $(imgId);
     img.src = evt.target.result;
     img.style.display = 'block';
     $(placeholderId).style.display = 'none';
-    
-    // Store in sessionStorage for preview page
-    sessionStorage.setItem('ibps_' + imgId, evt.target.result);
+    sessionStorage.setItem(storeKey, evt.target.result);
   };
   reader.readAsDataURL(file);
 }
 
-// Demo data generator
+// Simulated webcam capture -> Live Captured Image
+$('btnCapturePhoto').addEventListener('click', function(){
+  var live = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='180' viewBox='0 0 150 180'><rect width='150' height='180' fill='%23dbeafe'/><circle cx='75' cy='68' r='30' fill='%2360a5fa'/><path d='M32,142 C32,110 118,110 118,142 L118,180 L32,180 Z' fill='%2360a5fa'/><text x='75' y='168' font-family='sans-serif' font-size='11' fill='%231e3a8a' text-anchor='middle'>LIVE CAPTURE</text></svg>";
+  var img = $('liveImg');
+  img.src = live; img.style.display = 'block';
+  $('livePlaceholder').style.display = 'none';
+  sessionStorage.setItem('ibps_liveImg', live);
+});
+
+// QR / signature scan info
+$('qrBox').addEventListener('click', function(){ alert('In the official portal this opens a QR code to capture your photo from a mobile phone. (Disabled in this practice copy.)'); });
+$('btnSigScan').addEventListener('click', function(){ alert('In the official portal this lets you scan your signature. Use "Browse" to upload a JPG in this practice copy.'); });
+
+// Demo data
 $('btnDemoData').addEventListener('click', function() {
-  // Use high-quality placeholders for demo
-  var demoPhoto = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='180' viewBox='0 0 150 180'><rect width='150' height='180' fill='%23e2e8f0'/><circle cx='75' cy='70' r='30' fill='%2394a3b8'/><path d='M35,140 C35,110 115,110 115,140 L115,180 L35,180 Z' fill='%2394a3b8'/><text x='50%23' y='160' font-family='sans-serif' font-size='12' fill='%23475569' text-anchor='middle'>DEMO PHOTO</text></svg>";
-  var demoSig = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='80' viewBox='0 0 200 80'><rect width='200' height='80' fill='%23f1f5f9'/><path d='M20,40 Q40,10 60,40 T100,40 T140,40 T180,30' fill='none' stroke='%230f172a' stroke-width='2'/><text x='100' y='65' font-family='sans-serif' font-size='10' fill='%2364748b' text-anchor='middle'>Demo Signature</text></svg>";
-  
-  var pImg = $('photoImg');
-  pImg.src = demoPhoto;
-  pImg.style.display = 'block';
-  $('photoPlaceholder').style.display = 'none';
+  var demoPhoto = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='180' viewBox='0 0 150 180'><rect width='150' height='180' fill='%23e2e8f0'/><circle cx='75' cy='70' r='30' fill='%2394a3b8'/><path d='M35,140 C35,110 115,110 115,140 L115,180 L35,180 Z' fill='%2394a3b8'/><text x='75' y='160' font-family='sans-serif' font-size='12' fill='%23475569' text-anchor='middle'>DEMO PHOTO</text></svg>";
+  var demoLive = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='180' viewBox='0 0 150 180'><rect width='150' height='180' fill='%23dbeafe'/><circle cx='75' cy='68' r='30' fill='%2360a5fa'/><path d='M32,142 C32,110 118,110 118,142 L118,180 L32,180 Z' fill='%2360a5fa'/><text x='75' y='168' font-family='sans-serif' font-size='11' fill='%231e3a8a' text-anchor='middle'>LIVE CAPTURE</text></svg>";
+  var demoSig = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='80' viewBox='0 0 200 80'><rect width='200' height='80' fill='%23f1f5f9'/><path d='M20,40 Q40,10 60,40 T100,40 T140,40 T180,30' fill='none' stroke='%230f172a' stroke-width='2'/><text x='100' y='68' font-family='sans-serif' font-size='10' fill='%2364748b' text-anchor='middle'>Demo Signature</text></svg>";
+
+  $('photoImg').src = demoPhoto; $('photoImg').style.display='block'; $('photoPlaceholder').style.display='none';
   $('photoFileName').textContent = 'demo_photo.jpg';
   sessionStorage.setItem('ibps_photoImg', demoPhoto);
-  
-  var sImg = $('sigImg');
-  sImg.src = demoSig;
-  sImg.style.display = 'block';
-  $('sigPlaceholder').style.display = 'none';
+
+  $('liveImg').src = demoLive; $('liveImg').style.display='block'; $('livePlaceholder').style.display='none';
+  sessionStorage.setItem('ibps_liveImg', demoLive);
+
+  $('sigImg').src = demoSig; $('sigImg').style.display='block'; $('sigPlaceholder').style.display='none';
   $('sigFileName').textContent = 'demo_sig.jpg';
   sessionStorage.setItem('ibps_sigImg', demoSig);
-  
-  $('confirmPhoto').checked = true;
+
+  $('confirmRecent').checked = true;
+  $('confirmCaptured').checked = true;
   $('confirmSig').checked = true;
-  
-  clearError('confirmPhoto');
-  clearError('confirmSig');
+  clearError('confirmRecent'); clearError('confirmCaptured'); clearError('confirmSig');
 });
 
 function showError(field, msg){
@@ -243,7 +351,6 @@ function showError(field, msg){
   if(input) input.classList.add('is-invalid');
   if(err){ err.textContent = msg; err.classList.add('show'); }
 }
-
 function clearError(field){
   var err = $('err_' + field);
   var input = $(field);
@@ -252,46 +359,31 @@ function clearError(field){
 }
 
 $('btnNext').addEventListener('click', function() {
-  var errors = [];
   var result = $('result');
-  
-  clearError('confirmPhoto');
-  clearError('confirmSig');
+  clearError('confirmRecent'); clearError('confirmCaptured'); clearError('confirmSig');
   result.style.display = 'none';
 
-  var hasPhoto = sessionStorage.getItem('ibps_photoImg') || $('photoImg').src;
-  var hasSig = sessionStorage.getItem('ibps_sigImg') || $('sigImg').src;
+  var hasPhoto = sessionStorage.getItem('ibps_photoImg');
+  var hasLive  = sessionStorage.getItem('ibps_liveImg');
+  var hasSig   = sessionStorage.getItem('ibps_sigImg');
+  var errors = 0;
 
-  if (!hasPhoto || hasPhoto === window.location.href) {
-    errors.push('photoFile');
-    alert('Please upload your photograph.');
-    return;
-  }
-  
-  if (!$('confirmPhoto').checked) {
-    showError('confirmPhoto', 'Please confirm that the photograph matches your details.');
-    errors.push('confirmPhoto');
-  }
+  if (!hasPhoto) { alert('Please upload your scanned photograph (use "Browse").'); return; }
+  if (!$('confirmRecent').checked) { showError('confirmRecent','Please confirm this is your recent photograph.'); errors++; }
 
-  if (!hasSig || hasSig === window.location.href) {
-    errors.push('sigFile');
-    alert('Please upload your signature.');
-    return;
-  }
-  
-  if (!$('confirmSig').checked) {
-    showError('confirmSig', 'Please confirm that the signature is correct.');
-    errors.push('confirmSig');
-  }
+  if (!hasLive) { alert('Please capture your live photograph (click "Capture Photo").'); return; }
+  if (!$('confirmCaptured').checked) { showError('confirmCaptured','Please confirm the captured photograph declaration.'); errors++; }
 
-  if (errors.length) {
+  if (!hasSig) { alert('Please upload your scanned signature (use "Browse").'); return; }
+  if (!$('confirmSig').checked) { showError('confirmSig','Please confirm this is your valid signature.'); errors++; }
+
+  if (errors) {
     result.className = 'alert-box error show';
     result.style.display = 'block';
-    result.textContent = 'Please confirm both declarations by checking the boxes above before continuing.';
+    result.textContent = 'Please tick all confirmation checkboxes before continuing.';
     return;
   }
 
-  // Go to Details Page
   window.location.href = 'details.html';
 });
 </script>
