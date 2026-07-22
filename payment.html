@@ -58,6 +58,17 @@
 
 <body class='bg-light' oncontextmenu="return false;">
 
+<!-- PAGE-WIDE COPY/PASTE BLOCK -->
+<script>
+(function(){
+  ['copy','paste','cut'].forEach(function(evt){
+    document.addEventListener(evt, function(e){ e.preventDefault(); }, true);
+  });
+  document.addEventListener('dragstart', function(e){ e.preventDefault(); }, true);
+})();
+</script>
+
+
 <div class="practice-banner">
   PRACTICE FORM by <span class="brand">Adda247</span> — NOT THE OFFICIAL IBPS PORTAL
   <small>Rehearsal copy for exam-prep only. Nothing typed here is submitted, transmitted, or stored anywhere.</small>
