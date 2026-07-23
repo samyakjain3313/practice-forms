@@ -80,6 +80,36 @@
 
   .divider-vert{border-right:1px solid #e2e8f0;}
   @media (max-width:767px){ .divider-vert{border-right:none;border-bottom:1px solid #e2e8f0;padding-bottom:16px;margin-bottom:16px;} }
+
+  /* ===== Webcam capture modal ===== */
+  .cam-overlay{
+    display:none;position:fixed;inset:0;background:rgba(15,23,42,.7);
+    z-index:10000;justify-content:center;align-items:center;padding:16px;
+  }
+  .cam-overlay.show{display:flex;}
+  .cam-dialog{
+    background:#fff;border-radius:12px;box-shadow:0 12px 48px rgba(0,0,0,.35);
+    width:100%;max-width:520px;padding:20px 22px;text-align:center;
+  }
+  .cam-dialog h4{font-weight:700;color:#1e293b;font-size:18px;margin-bottom:4px;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .cam-dialog .cam-sub{font-size:12.5px;color:#64748b;margin-bottom:14px;}
+  .cam-stage{
+    width:100%;max-width:360px;margin:0 auto 14px;background:#0f172a;border-radius:10px;
+    overflow:hidden;position:relative;aspect-ratio:3.5/4.5;display:flex;align-items:center;justify-content:center;
+  }
+  .cam-stage video,.cam-stage img{width:100%;height:100%;object-fit:cover;display:block;}
+  .cam-stage video{transform:scaleX(-1);} /* mirror live preview */
+  .cam-guide{
+    position:absolute;inset:12%;border:2px dashed rgba(255,255,255,.6);border-radius:8px;pointer-events:none;
+  }
+  .cam-msg{color:#e2e8f0;font-size:13px;padding:24px;line-height:1.5;}
+  .cam-btn{border-radius:6px;font-weight:600;font-size:13.5px;padding:8px 20px;margin:4px;border:none;cursor:pointer;}
+  .cam-btn-primary{background:#3b82f6;color:#fff;}
+  .cam-btn-primary:hover{background:#2563eb;}
+  .cam-btn-success{background:#16a34a;color:#fff;}
+  .cam-btn-success:hover{background:#15803d;}
+  .cam-btn-light{background:#e2e8f0;color:#334155;}
+  .cam-btn-light:hover{background:#cbd5e1;}
 </style>
 </head>
 
@@ -249,10 +279,35 @@
     </div>
 
     <div class="row justify-content-center mt-4 mb-5">
-      <a href="index.html" class="btn sbtn1 mr-3" style="text-decoration:none;">Back</a>
+      <a href="otp_verification.html" class="btn sbtn1 mr-3" style="text-decoration:none;">Back</a>
       <input class="btn sbtn" type="button" id="btnNext" value="Next">
     </div>
   </form>
+</div>
+
+<!-- ===== Webcam capture modal ===== -->
+<div class="cam-overlay" id="camOverlay">
+  <div class="cam-dialog">
+    <h4><i class="bi bi-camera-fill" style="color:#3b82f6"></i> Capture Photo</h4>
+    <div class="cam-sub">Position your face inside the dashed guide, then click Capture.</div>
+
+    <div class="cam-stage" id="camStage">
+      <video id="camVideo" autoplay playsinline muted></video>
+      <img id="camShot" style="display:none;" alt="Captured frame">
+      <div class="cam-guide" id="camGuide"></div>
+      <div class="cam-msg" id="camMsg" style="display:none;"></div>
+    </div>
+    <canvas id="camCanvas" style="display:none;"></canvas>
+
+    <div id="camControls">
+      <button type="button" class="cam-btn cam-btn-primary" id="camCapture"><i class="bi bi-camera"></i> Capture</button>
+      <button type="button" class="cam-btn cam-btn-light" id="camClose">Cancel</button>
+    </div>
+    <div id="camControlsAfter" style="display:none;">
+      <button type="button" class="cam-btn cam-btn-light" id="camRetake"><i class="bi bi-arrow-counterclockwise"></i> Retake</button>
+      <button type="button" class="cam-btn cam-btn-success" id="camUse"><i class="bi bi-check-lg"></i> Use this Photo</button>
+    </div>
+  </div>
 </div>
 
 <footer class="footer">
@@ -320,13 +375,101 @@ function handleFileSelect(file, imgId, placeholderId, storeKey) {
   reader.readAsDataURL(file);
 }
 
-// Simulated webcam capture -> Live Captured Image
-$('btnCapturePhoto').addEventListener('click', function(){
-  var live = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='180' viewBox='0 0 150 180'><rect width='150' height='180' fill='%23dbeafe'/><circle cx='75' cy='68' r='30' fill='%2360a5fa'/><path d='M32,142 C32,110 118,110 118,142 L118,180 L32,180 Z' fill='%2360a5fa'/><text x='75' y='168' font-family='sans-serif' font-size='11' fill='%231e3a8a' text-anchor='middle'>LIVE CAPTURE</text></svg>";
+// ===== Real webcam capture -> Live Captured Image =====
+var camStream = null;
+var capturedDataUrl = null;
+
+function stopCam(){
+  if(camStream){ camStream.getTracks().forEach(function(t){ t.stop(); }); camStream = null; }
+}
+function showCamMessage(html){
+  $('camVideo').style.display = 'none';
+  $('camShot').style.display = 'none';
+  $('camGuide').style.display = 'none';
+  var msg = $('camMsg');
+  msg.style.display = 'block';
+  msg.innerHTML = html;
+  $('camControls').style.display = 'none';
+  $('camControlsAfter').style.display = 'none';
+}
+function resetCamToLive(){
+  $('camShot').style.display = 'none';
+  $('camMsg').style.display = 'none';
+  $('camVideo').style.display = 'block';
+  $('camGuide').style.display = 'block';
+  $('camControls').style.display = 'block';
+  $('camControlsAfter').style.display = 'none';
+  capturedDataUrl = null;
+}
+function closeCam(){
+  stopCam();
+  $('camOverlay').classList.remove('show');
+}
+
+async function openCam(){
+  $('camOverlay').classList.add('show');
+  resetCamToLive();
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    showCamMessage('Your browser does not support live camera capture. Please use the <b>Browse</b> option to upload a photo instead.');
+    return;
+  }
+  try{
+    camStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 800 } },
+      audio: false
+    });
+    var v = $('camVideo');
+    v.srcObject = camStream;
+    await v.play().catch(function(){});
+  }catch(err){
+    var hint = 'Unable to access the camera.';
+    if(err && (err.name === 'NotAllowedError' || err.name === 'SecurityError')){
+      hint = 'Camera permission was blocked. Please allow camera access for this site in your browser and try again.';
+    } else if(err && err.name === 'NotFoundError'){
+      hint = 'No camera was found on this device.';
+    } else if(err && err.name === 'NotReadableError'){
+      hint = 'The camera is currently in use by another application. Close it and try again.';
+    }
+    showCamMessage(hint + '<br><br>You can also use the <b>Browse</b> option to upload a photo.');
+  }
+}
+
+$('btnCapturePhoto').addEventListener('click', openCam);
+$('camClose').addEventListener('click', closeCam);
+$('camOverlay').addEventListener('click', function(e){ if(e.target === this) closeCam(); });
+
+$('camCapture').addEventListener('click', function(){
+  var v = $('camVideo');
+  if(!v.videoWidth){ return; }
+  var canvas = $('camCanvas');
+  canvas.width = v.videoWidth;
+  canvas.height = v.videoHeight;
+  var ctx = canvas.getContext('2d');
+  // mirror horizontally to match the previewed (mirrored) video
+  ctx.translate(canvas.width, 0);
+  ctx.scale(-1, 1);
+  ctx.drawImage(v, 0, 0, canvas.width, canvas.height);
+  capturedDataUrl = canvas.toDataURL('image/jpeg', 0.9);
+
+  var shot = $('camShot');
+  shot.src = capturedDataUrl;
+  shot.style.display = 'block';
+  v.style.display = 'none';
+  $('camGuide').style.display = 'none';
+  $('camControls').style.display = 'none';
+  $('camControlsAfter').style.display = 'block';
+});
+
+$('camRetake').addEventListener('click', resetCamToLive);
+
+$('camUse').addEventListener('click', function(){
+  if(!capturedDataUrl){ return; }
   var img = $('liveImg');
-  img.src = live; img.style.display = 'block';
+  img.src = capturedDataUrl;
+  img.style.display = 'block';
   $('livePlaceholder').style.display = 'none';
-  sessionStorage.setItem('ibps_liveImg', live);
+  sessionStorage.setItem('ibps_liveImg', capturedDataUrl);
+  closeCam();
 });
 
 // QR / signature scan info

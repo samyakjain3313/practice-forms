@@ -870,8 +870,8 @@
     sessionStorage.setItem('ibps_reg_no', regNo);
     sessionStorage.setItem('ibps_password', pwd);
 
-    // Redirect directly to photo & signature page
-    window.location.href = 'photo_signature.html';
+    // Redirect to OTP verification (mobile + email) before photo & signature
+    window.location.href = 'otp_verification.html';
   });
 
   // Close modal on overlay click
