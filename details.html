@@ -1733,6 +1733,41 @@ function focusFirstError(errors){
   if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
 }
 
+// Build a complete, human-readable snapshot of the whole form for the preview page
+function radioLabel(name){
+  var els = document.getElementsByName(name);
+  for(var i=0;i<els.length;i++){
+    if(els[i].checked){
+      var lab = document.querySelector('label[for="'+els[i].id+'"]');
+      return lab ? lab.textContent.trim() : els[i].value;
+    }
+  }
+  return '';
+}
+function buildSnapshot(){
+  var snap = {}, seenRadio = {};
+  var els = document.querySelectorAll('#details_frm input[name], #details_frm select[name], #details_frm textarea[name]');
+  els.forEach(function(el){
+    var name = el.name;
+    if(el.type === 'radio'){
+      if(seenRadio[name]) return; seenRadio[name] = 1;
+      snap[name] = radioLabel(name);
+    } else if(el.type === 'checkbox'){
+      snap[name] = el.checked ? 'Yes' : 'No';
+    } else if(el.tagName === 'SELECT'){
+      if(el.multiple){
+        snap[name] = Array.prototype.filter.call(el.options, function(o){ return o.selected; })
+                      .map(function(o){ return o.text; }).join(', ');
+      } else {
+        snap[name] = el.value ? el.options[el.selectedIndex].text : '';
+      }
+    } else {
+      snap[name] = (el.value || '').trim();
+    }
+  });
+  return snap;
+}
+
 $('btnValidateDetails').addEventListener('click', function(){
   var errors = validateAll();
   var result = $('result');
@@ -1807,6 +1842,9 @@ $('btnNext').addEventListener('click', function() {
   sessionStorage.setItem('ibps_lang2', val('selLang2'));
   sessionStorage.setItem('ibps_lang3', val('selLang3'));
   sessionStorage.setItem('ibps_banks', JSON.stringify(selectedBankOrder));
+
+  // Full snapshot of every field for a complete preview
+  sessionStorage.setItem('ibps_snapshot', JSON.stringify(buildSnapshot()));
 
   window.location.href = 'preview.html';
 });
